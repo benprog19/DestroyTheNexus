@@ -73,10 +73,6 @@ public class Arena {
         return this.minPlayers;
     }
 
-    /*
-    If nexuses are disabled, then gamemode is changed to TDM.
-     */
-
     public void setNexuses(boolean enabled) {
         hasNexuses = enabled;
     }
