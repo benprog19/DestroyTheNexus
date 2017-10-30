@@ -37,8 +37,6 @@ public class Arenas {
         while(iterator.hasNext()) {
             String iter = iterator.next();
 
-            System.out.print(iter + " " + arenas.size());
-
             Arena arena = Arena.createArena(config.getConfigurationSection("Arenas." + iter));
 
             console.sendMessage(ChatColor.BLUE + "Loaded " + arena.getName() + "...");
