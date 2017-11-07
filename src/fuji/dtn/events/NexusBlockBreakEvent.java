@@ -1,5 +1,6 @@
 package fuji.dtn.events;
 
+import fuji.dtn.game.Game;
 import fuji.dtn.game.GameState;
 import fuji.dtn.game.Players;
 import fuji.dtn.main.Main;
@@ -72,6 +73,7 @@ public class NexusBlockBreakEvent implements Listener {
                                     Bukkit.broadcastMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE TEAM WINS!");
                                     blocksBlue = 0;
                                     blocksRed = 0;
+                                    Game.endGame(blue);
                                 }
                             }
                         } else {
@@ -90,6 +92,7 @@ public class NexusBlockBreakEvent implements Listener {
                                     Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "RED TEAM WINS!");
                                     blocksBlue = 0;
                                     blocksRed = 0;
+                                    Game.endGame(red);
                                 }
                             }
                         } else {
