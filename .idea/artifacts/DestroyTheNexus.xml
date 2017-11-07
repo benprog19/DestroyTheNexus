@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DestroyTheNexus">
+    <output-path>$PROJECT_DIR$/../../../Spigot_Server/plugins</output-path>
+    <root id="archive" name="DestroyTheNexus.jar">
+      <element id="module-output" name="DestroyTheNexus" />
+    </root>
+  </artifact>
+</component>

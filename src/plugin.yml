@@ -1,0 +1,7 @@
+name: DestroyTheNexus
+version: 1.0-ALPHA
+author: zFuji
+main: fuji.dtn.main.Main
+commands:
+   dtn:
+   kit:
