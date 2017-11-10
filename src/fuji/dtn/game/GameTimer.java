@@ -5,10 +5,11 @@ import fuji.dtn.kits.Kit;
 import fuji.dtn.kits.Kits;
 import fuji.dtn.main.Main;
 import fuji.dtn.rotation.Rotation;
+import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
+import fuji.dtn.util.InstantFireworkUtil;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -88,6 +89,37 @@ public class GameTimer {
                         }
                     }
                     cancel();
+                }
+            }
+        }.runTaskTimer(JavaPlugin.getPlugin(Main.class), 0L, 20L);
+    }
+
+    public void endingGame(final Team winningTeam, final Team losingTeam) {
+        runnable = new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                count--;
+                if (count == 120 || count == 60 || count == 30 || count == 25 || count == 20 || count == 15 || count == 10 || (count <= 5 && count > 0) ) {
+                    for (int i = 0; i < players.size(); i++) {
+                        Player player = Bukkit.getPlayer(players.get(i));
+                        if (player.isOnline()) {
+                            player.sendMessage(ChatColor.GOLD + "Match rotating in " + ChatColor.RED + count + " seconds...");
+                            final FireworkEffect red = FireworkEffect.builder().flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.RED).build();
+
+                             final FireworkEffect blue = FireworkEffect.builder().flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.BLUE).build();
+
+                            if (winningTeam.getColor().equals(ChatColor.RED)) {
+                                new InstantFireworkUtil(red,
+                                        new Location(player.getWorld(), player.getLocation().getX(), player.getLocation().getY() + 2,
+                                        player.getLocation().getZ()));
+                            } else if (winningTeam.getColor().equals(ChatColor.BLUE)) {
+                                new InstantFireworkUtil(blue,
+                                        new Location(player.getWorld(), player.getLocation().getX(), player.getLocation().getY() + 2,
+                                                player.getLocation().getZ()));
+                            }
+                        }
+                    }
                 }
             }
         }.runTaskTimer(JavaPlugin.getPlugin(Main.class), 0L, 20L);

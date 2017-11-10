@@ -5,10 +5,12 @@ import fuji.dtn.arena.Arenas;
 import fuji.dtn.arena.ResetArena;
 import fuji.dtn.arena.SelectionMode;
 import fuji.dtn.game.Game;
+import fuji.dtn.game.GameState;
 import fuji.dtn.game.Players;
 import fuji.dtn.game.Spectators;
 import fuji.dtn.main.Main;
 import fuji.dtn.rotation.Rotation;
+import fuji.dtn.teams.Teams;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -93,10 +95,8 @@ public class DTNCommand implements CommandExecutor {
                                 player.sendMessage(ChatColor.GOLD + "Game has been started with " + ChatColor.RED + Players.getPlayers().size() + " players" + ChatColor.GOLD + " playing " + ChatColor.RED + Rotation.getCurrentArena().getName() + " by " + Rotation.getCurrentArena().getCreator());
                             }
                         } else if (args[1].equalsIgnoreCase("stop")) {
-                            for (Player players : Bukkit.getOnlinePlayers()) {
-                                if (!Spectators.isSpectator(players)) {
-                                    Players.removePlayer(players);
-                                }
+                            if (GameState.getGameState().equals(GameState.INGAME)) {
+                                Game.endGame(Teams.getTeamFromPlayer(player));
                             }
                         }
                     }

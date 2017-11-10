@@ -85,6 +85,14 @@ public class Kit {
             player.getInventory().setItem(entry.getKey(), itemStack);
             player.updateInventory();
         }
+        setPotionEffect(player);
+    }
+
+    public void setPotionEffect(Player player) {
+        player.getActivePotionEffects().clear();
+        if (potionEffect != null) {
+            player.addPotionEffect(new PotionEffect(potionEffect.getType(), 1000000, potionEffect.getAmplifier()));
+        }
     }
 
 }

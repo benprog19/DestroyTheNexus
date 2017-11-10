@@ -58,10 +58,12 @@ public class Kits {
 
                     if (kitname != null) {
                         Kit kit = new Kit(kitname, price, potionEffect);
+                        potionEffects.put(kit, potionEffect);
                     }
                 } else {
                     if (kitname != null) {
                         Kit kit = new Kit(kitname, price, null);
+                        potionEffects.put(kit, null);
                     }
                 }
 
@@ -141,6 +143,10 @@ public class Kits {
         }
         itemStack.setItemMeta(itemMeta);
         return itemStack;
+    }
+
+    public static Kit getDefaultKit() {
+        return null;
     }
 
 }

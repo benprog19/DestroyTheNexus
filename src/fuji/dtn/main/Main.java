@@ -9,6 +9,7 @@ import fuji.dtn.commands.KitCommand;
 import fuji.dtn.events.ChatEvent;
 import fuji.dtn.events.DeathEvent;
 import fuji.dtn.events.NexusBlockBreakEvent;
+import fuji.dtn.events.QuitEvent;
 import fuji.dtn.game.GameState;
 import fuji.dtn.game.Spectators;
 import fuji.dtn.kits.Kits;
@@ -49,6 +50,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new NexusBlockBreakEvent(), this);
         getServer().getPluginManager().registerEvents(new DeathEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
+        getServer().getPluginManager().registerEvents(new QuitEvent(), this);
 
         red = new Team("Red", ChatColor.RED, new ArrayList<>());
         blue = new Team("Blue", ChatColor.BLUE, new ArrayList<>());
