@@ -10,9 +10,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.UUID;
-
-import static sun.audio.AudioPlayer.player;
 
 /**
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -75,6 +74,22 @@ public class Players {
                 }
 
             }
+        }
+    }
+
+    public static void fixPlayerSetup(ArrayList<UUID> players) {
+        if (Players.getPlayers().size() != players.size()) {
+            Players.getPlayers().clear();
+            players.clear();
+            Iterator<? extends Player> playersIter = Bukkit.getOnlinePlayers().iterator();
+            while (playersIter.hasNext()) {
+                Player player = playersIter.next();
+                Players.addPlayer(player);
+                players.add(player.getUniqueId());
+            }
+            Bukkit.broadcastMessage(ChatColor.GREEN + "All players are set and ready to go.");
+            Teams.balance(players);
+
         }
     }
 

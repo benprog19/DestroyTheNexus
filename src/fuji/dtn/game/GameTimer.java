@@ -6,7 +6,6 @@ import fuji.dtn.kits.Kits;
 import fuji.dtn.main.Main;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Team;
-import fuji.dtn.teams.Teams;
 import fuji.dtn.util.InstantFireworkUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
@@ -39,6 +38,8 @@ public class GameTimer {
     }
 
     public void startCountdown() {
+        Players.fixPlayerSetup(players);
+
         runnable = new BukkitRunnable() {
             @Override
             public void run() {
@@ -53,9 +54,6 @@ public class GameTimer {
                 }
 
                 if (count == 0) {
-
-
-                    Teams.balance(players);
                     ResetArena.resetArena(Rotation.getCurrentArena());
                     Players.teleportPlayerToTeams(null, true);
                     GameState.setGameState(GameState.INGAME);
@@ -93,6 +91,8 @@ public class GameTimer {
             }
         }.runTaskTimer(JavaPlugin.getPlugin(Main.class), 0L, 20L);
     }
+
+
 
     public void endingGame(final Team winningTeam, final Team losingTeam) {
         runnable = new BukkitRunnable() {
