@@ -1,0 +1,23 @@
+Todo list for DestroyTheNexus-v3.0:
+(11/27/17)
+
+- Add features with scoreboards (public scoreboard, not per-player)
+- Hide player tags with scoreboard teams for opposite teams
+- Work on colored armor support
+- Work on game ending
+- Fix Game object (This needs to be changed, the current method is unstable and is messy)
+- Add special effects for winners of game
+- Work on spectator management
+- Finish event listeners (InteractEvent, ...)
+- Make all messages customizeable
+- Add PlayerData for achievements, stats, and kits
+- Make mysql support for PlayerData
+- Customizeable config game options
+- Possible glitch with map rebuilding?
+- Work on Player Team balancing (optional?)
+- Custom music/sounds (Zach?)  [Cannot sell on SpigotMC.org]
+
+
+Other:
+
+- Setup TestServer
