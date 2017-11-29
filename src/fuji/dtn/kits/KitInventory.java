@@ -9,6 +9,8 @@ import org.bukkit.inventory.ItemStack;
  * Created by Ben on 9/25/2017.
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
  */
+
+@Deprecated
 public class KitInventory {
 
     Kit kit;

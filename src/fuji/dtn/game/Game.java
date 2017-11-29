@@ -30,7 +30,7 @@ public class Game {
 
     public void beginGame() {
         GameState.setGameState(GameState.STARTING);
-        GameTimer timer = new GameTimer(30, players);
+        GameTimer timer = new GameTimer(1, players);
         timer.startCountdown();
     }
 

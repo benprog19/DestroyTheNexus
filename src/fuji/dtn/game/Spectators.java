@@ -1,5 +1,7 @@
 package fuji.dtn.game;
 
+import fuji.dtn.rotation.Rotation;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -30,6 +32,13 @@ public class Spectators implements Listener {
         if (!isSpectator(player)) {
             spectators.add(player.getUniqueId());
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100000, 255));
+
+            if (Rotation.getCurrentArena() != null) {
+                if (Rotation.getCurrentArena().getRedLocation() != null) {
+                    Location redLoc = Rotation.getCurrentArena().getRedLocation();
+                    player.teleport(redLoc);
+                }
+            }
         }
 
     }

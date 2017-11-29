@@ -1,9 +1,14 @@
 package fuji.dtn.kits;
 
+import fuji.dtn.main.Main;
+import fuji.dtn.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
@@ -79,6 +84,23 @@ public class Kit {
         ConcurrentHashMap<Integer, ItemStack> itemStackHashMap = Kits.item;
         System.out.print("Items: " + itemStackHashMap.size());
         for (Map.Entry<Integer, ItemStack> entry : itemStackHashMap.entrySet()) {
+            if (entry.getValue().getType().equals(Material.LEATHER_HELMET) || entry.getValue().getType().equals(Material.LEATHER_CHESTPLATE)
+                    || entry.getValue().getType().equals(Material.LEATHER_LEGGINGS) || entry.getValue().getType().equals(Material.LEATHER_BOOTS)) {
+                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) entry.getValue().getItemMeta();
+                if (Main.kitStorage.get().getBoolean("Kits." + name + ".coloredArmor")) {
+                    Color color;
+                    if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("red"))) {
+                      color = Color.fromRGB(255, 0, 0);
+                    } else if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("blue"))) {
+                        color = Color.fromRGB(0, 0, 255);
+                    } else {
+                        color = Color.WHITE;
+                    }
+
+                    leatherArmorMeta.setColor(color);
+                }
+
+            }
             System.out.print("Slot Num: " + entry.getKey());
             ItemStack itemStack = entry.getValue();
             System.out.print("Slot DisplayName: " + itemStack.getItemMeta().getDisplayName());

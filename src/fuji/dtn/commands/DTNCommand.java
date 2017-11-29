@@ -84,14 +84,14 @@ public class DTNCommand implements CommandExecutor {
                             }
 
                             if (Rotation.getCurrentArena() != null) {
-                                Game game = new Game(Rotation.getCurrentArena(), Players.getPlayers());
-                                game.beginGame();
                                 for (Player players : Bukkit.getOnlinePlayers()) {
                                     if (!Spectators.isSpectator(players)) {
                                         Players.addPlayer(players);
                                         players.sendMessage(ChatColor.BLUE + "You have been added into the Game.");
                                     }
                                 }
+                                Game game = new Game(Rotation.getCurrentArena(), Players.getPlayers());
+                                game.beginGame();
                                 player.sendMessage(ChatColor.GOLD + "Game has been started with " + ChatColor.RED + Players.getPlayers().size() + " players" + ChatColor.GOLD + " playing " + ChatColor.RED + Rotation.getCurrentArena().getName() + " by " + Rotation.getCurrentArena().getCreator());
                             }
                         } else if (args[1].equalsIgnoreCase("stop")) {

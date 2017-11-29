@@ -89,8 +89,9 @@ public class Players {
             }
             Bukkit.broadcastMessage(ChatColor.GREEN + "All players are set and ready to go.");
             Teams.balance(players);
-
         }
+        Bukkit.broadcastMessage(ChatColor.GREEN + "Balancing Teams...");
+        Teams.balance(players);
     }
 
     public static void setupPlayers() {

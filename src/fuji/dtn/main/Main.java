@@ -71,6 +71,7 @@ public class Main extends JavaPlugin {
             kitStorage.get().set("Kits.Standard.name", "Standard");
             kitStorage.get().set("Kits.Standard.price", 0);
             kitStorage.get().set("Kits.Standard.default", true);
+            kitStorage.get().set("Kits.Standard.coloredArmor", "true");
             kitStorage.get().set("Kits.Standard.potionEffect", "clear");
 
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem.material", "IRON_SWORD");
@@ -96,6 +97,7 @@ public class Main extends JavaPlugin {
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem2.amount", 1);
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem2.lore", new ArrayList<String>().add("&7Example Lore"));
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem2.unbreakable", true);
+
 
             kitStorage.save();
         } else {
