@@ -28,6 +28,7 @@ public class Kits {
 
     static ArrayList<Kit> kits = new ArrayList<>();
 
+    static ConcurrentHashMap<String, ItemStack> itemIDs = new ConcurrentHashMap<>();
     static ConcurrentHashMap<Integer, ItemStack> item = new ConcurrentHashMap<>();
     static ConcurrentHashMap<Kit, PotionEffect> potionEffects = new ConcurrentHashMap<>();
 
@@ -92,6 +93,7 @@ public class Kits {
             ConfigurationSection itemSection = inventory.getConfigurationSection("." + itemID);
             ItemStack itemStack = createItemStack(itemSection);
             item.put(itemSection.getInt(".slot"), itemStack);
+            itemIDs.put(itemID, itemStack);
         }
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + " # New Kit Registry #   " + ChatColor.BLUE + "Name: " + kit.getName() + "  " + kit.getPrice());

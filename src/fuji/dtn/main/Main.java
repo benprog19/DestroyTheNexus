@@ -68,10 +68,11 @@ public class Main extends JavaPlugin {
             kitStorage.create();
             kitStorage.load();
 
+            kitStorage.get().options().header("Please refer to https://i.gyazo.com/9d52e1fd4dc14790ec66eab4a9aee00e.png for slot numbers.");
             kitStorage.get().set("Kits.Standard.name", "Standard");
             kitStorage.get().set("Kits.Standard.price", 0);
             kitStorage.get().set("Kits.Standard.default", true);
-            kitStorage.get().set("Kits.Standard.coloredArmor", "true");
+            kitStorage.get().set("Kits.Standard.coloredArmor", true);
             kitStorage.get().set("Kits.Standard.potionEffect", "clear");
 
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem.material", "IRON_SWORD");
@@ -79,7 +80,7 @@ public class Main extends JavaPlugin {
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem.slot", 0);
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem.data", 0);
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem.amount", 1);
-            kitStorage.get().set("Kits.Standard.Inventory.exampleItem.lore", new ArrayList<String>().add("&7Example Lore"));
+            kitStorage.get().set("Kits.Standard.Inventory.exampleItem.lore", new ArrayList<String>().add("&7Default Iron Sword"));
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem.unbreakable", true);
 
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem1.material", "IRON_PICKAXE");
@@ -87,7 +88,7 @@ public class Main extends JavaPlugin {
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem1.slot", 1);
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem1.data", 0);
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem1.amount", 1);
-            kitStorage.get().set("Kits.Standard.Inventory.exampleItem1.lore", new ArrayList<String>().add("&7Example Lore"));
+            kitStorage.get().set("Kits.Standard.Inventory.exampleItem1.lore", new ArrayList<String>().add("&7Default Iron Pickaxe"));
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem1.unbreakable", true);
 
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem2.material", "IRON_AXE");
@@ -95,9 +96,51 @@ public class Main extends JavaPlugin {
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem2.slot", 2);
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem2.data", 0);
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem2.amount", 1);
-            kitStorage.get().set("Kits.Standard.Inventory.exampleItem2.lore", new ArrayList<String>().add("&7Example Lore"));
+            kitStorage.get().set("Kits.Standard.Inventory.exampleItem2.lore", new ArrayList<String>().add("&7Default Iron Axe"));
             kitStorage.get().set("Kits.Standard.Inventory.exampleItem2.unbreakable", true);
 
+            kitStorage.get().set("Kits.Standard.Inventory.exampleItem3.material", "WOOD");
+            kitStorage.get().set("Kits.Standard.Inventory.exampleItem3.displayname", "&cWood");
+            kitStorage.get().set("Kits.Standard.Inventory.exampleItem3.slot", 8);
+            kitStorage.get().set("Kits.Standard.Inventory.exampleItem3.data", 0);
+            kitStorage.get().set("Kits.Standard.Inventory.exampleItem3.amount", 64);
+            kitStorage.get().set("Kits.Standard.Inventory.exampleItem3.lore", new ArrayList<String>().add("&7Default Wood Stack"));
+
+            kitStorage.get().set("Kits.Standard.Inventory.protection1.material", "LEATHER_HELMET");
+            kitStorage.get().set("Kits.Standard.Inventory.protection1.armorType", "helmet");
+            kitStorage.get().set("Kits.Standard.Inventory.protection1.displayname", "&cHelmet");
+            kitStorage.get().set("Kits.Standard.Inventory.protection1.slot", 5);
+            kitStorage.get().set("Kits.Standard.Inventory.protection1.data", 0);
+            kitStorage.get().set("Kits.Standard.Inventory.protection1.amount", 1);
+            kitStorage.get().set("Kits.Standard.Inventory.protection1.lore", new ArrayList<String>().add("&7Protection"));
+            kitStorage.get().set("Kits.Standard.Inventory.protection1.unbreakable", true);
+
+            kitStorage.get().set("Kits.Standard.Inventory.protection2.material", "LEATHER_CHESTPLATE");
+            kitStorage.get().set("Kits.Standard.Inventory.protection2.armorType", "chestplate");
+            kitStorage.get().set("Kits.Standard.Inventory.protection2.displayname", "&cChestplate");
+            kitStorage.get().set("Kits.Standard.Inventory.protection2.slot", 6);
+            kitStorage.get().set("Kits.Standard.Inventory.protection2.data", 0);
+            kitStorage.get().set("Kits.Standard.Inventory.protection2.amount", 1);
+            kitStorage.get().set("Kits.Standard.Inventory.protection2.lore", new ArrayList<String>().add("&7Protection"));
+            kitStorage.get().set("Kits.Standard.Inventory.protection2.unbreakable", true);
+
+            kitStorage.get().set("Kits.Standard.Inventory.protection3.material", "LEATHER_LEGGINGS");
+            kitStorage.get().set("Kits.Standard.Inventory.protection3.armorType", "leggings");
+            kitStorage.get().set("Kits.Standard.Inventory.protection3.displayname", "&cLeggings");
+            kitStorage.get().set("Kits.Standard.Inventory.protection3.slot", 7);
+            kitStorage.get().set("Kits.Standard.Inventory.protection3.data", 0);
+            kitStorage.get().set("Kits.Standard.Inventory.protection3.amount", 1);
+            kitStorage.get().set("Kits.Standard.Inventory.protection3.lore", new ArrayList<String>().add("&7Protection"));
+            kitStorage.get().set("Kits.Standard.Inventory.protection3.unbreakable", true);
+
+            kitStorage.get().set("Kits.Standard.Inventory.protection4.material", "LEATHER_BOOTS");
+            kitStorage.get().set("Kits.Standard.Inventory.protection4.armorType", "boots");
+            kitStorage.get().set("Kits.Standard.Inventory.protection4.displayname", "&cBoots");
+            kitStorage.get().set("Kits.Standard.Inventory.protection4.slot", 8);
+            kitStorage.get().set("Kits.Standard.Inventory.protection4.data", 0);
+            kitStorage.get().set("Kits.Standard.Inventory.protection4.amount", 1);
+            kitStorage.get().set("Kits.Standard.Inventory.protection4.lore", new ArrayList<String>().add("&7Protection"));
+            kitStorage.get().set("Kits.Standard.Inventory.protection4.unbreakable", true);
 
             kitStorage.save();
         } else {

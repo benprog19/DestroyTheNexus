@@ -81,30 +81,65 @@ public class Kit {
     }
 
     public void setInventory(Player player) {
+        player.getInventory().clear();
+        player.updateInventory();
         ConcurrentHashMap<Integer, ItemStack> itemStackHashMap = Kits.item;
         System.out.print("Items: " + itemStackHashMap.size());
         for (Map.Entry<Integer, ItemStack> entry : itemStackHashMap.entrySet()) {
             if (entry.getValue().getType().equals(Material.LEATHER_HELMET) || entry.getValue().getType().equals(Material.LEATHER_CHESTPLATE)
                     || entry.getValue().getType().equals(Material.LEATHER_LEGGINGS) || entry.getValue().getType().equals(Material.LEATHER_BOOTS)) {
-                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) entry.getValue().getItemMeta();
+                System.out.print("Found Armor");
                 if (Main.kitStorage.get().getBoolean("Kits." + name + ".coloredArmor")) {
-                    Color color;
-                    if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("red"))) {
-                      color = Color.fromRGB(255, 0, 0);
-                    } else if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("blue"))) {
-                        color = Color.fromRGB(0, 0, 255);
-                    } else {
-                        color = Color.WHITE;
+                    System.out.print("Is Colored");
+                    KitArmorSet kitArmorSet = new KitArmorSet(name);
+                    kitArmorSet.listIDs();
+
+
+                    ItemStack itemStack = null;
+                    if (entry.getValue().getType().equals(Material.LEATHER_HELMET)) {
+                        itemStack = kitArmorSet.getHelmet();
+                    } else if (entry.getValue().getType().equals(Material.LEATHER_CHESTPLATE)) {
+                        itemStack = kitArmorSet.getChestplate();
+                    } else if (entry.getValue().getType().equals(Material.LEATHER_LEGGINGS)) {
+                        itemStack = kitArmorSet.getLeggings();
+                    } else if (entry.getValue().getType().equals(Material.LEATHER_BOOTS)) {
+                        itemStack = kitArmorSet.getBoots();
                     }
 
-                    leatherArmorMeta.setColor(color);
+                    if (itemStack != null) {
+                        LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+                        Color color;
+                        if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("red"))) {
+                            color = Color.fromRGB(255, 0, 0);
+                        } else if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("blue"))) {
+                            color = Color.fromRGB(0, 0, 255);
+                        } else {
+                            color = Color.WHITE;
+                        }
+
+                        leatherArmorMeta.setColor(color);
+                        entry.getValue().setItemMeta(leatherArmorMeta);
+
+                        if (entry.getValue().getType().equals(Material.LEATHER_HELMET)) {
+                            player.getInventory().setHelmet(itemStack);
+                        } else if (entry.getValue().getType().equals(Material.LEATHER_CHESTPLATE)) {
+                            player.getInventory().setChestplate(itemStack);
+                        } else if (entry.getValue().getType().equals(Material.LEATHER_LEGGINGS)) {
+                            player.getInventory().setLeggings(itemStack);
+                        } else if (entry.getValue().getType().equals(Material.LEATHER_BOOTS)) {
+                            player.getInventory().setBoots(itemStack);
+                        }
+
+                        // TODO: Not setting armor?
+                    }
                 }
 
+            } else {
+                System.out.print("Slot Num: " + entry.getKey());
+                ItemStack itemStack = entry.getValue();
+                System.out.print("Slot DisplayName: " + itemStack.getItemMeta().getDisplayName());
+                player.getInventory().setItem(entry.getKey(), itemStack);
             }
-            System.out.print("Slot Num: " + entry.getKey());
-            ItemStack itemStack = entry.getValue();
-            System.out.print("Slot DisplayName: " + itemStack.getItemMeta().getDisplayName());
-            player.getInventory().setItem(entry.getKey(), itemStack);
             player.updateInventory();
         }
         setPotionEffect(player);
