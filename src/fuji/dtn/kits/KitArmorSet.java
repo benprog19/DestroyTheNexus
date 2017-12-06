@@ -47,14 +47,18 @@ public class KitArmorSet {
         }
 
         for (Map.Entry<String, ItemStack> entry : validArmorType.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase("helmet")) {
+            if (Main.kitStorage.get().getString("Kits." + kitName + ".Inventory." + entry.getKey() + ".armorType").equalsIgnoreCase("helmet")) {
                 helmet = entry.getValue();
-            } else if (entry.getKey().equalsIgnoreCase("chestplate")) {
+
+            } else if (Main.kitStorage.get().getString("Kits." + kitName + ".Inventory." + entry.getKey() + ".armorType").equalsIgnoreCase("chestplate")) {
                 chestplate = entry.getValue();
-            } else if (entry.getKey().equalsIgnoreCase("leggings")) {
+
+            } else if (Main.kitStorage.get().getString("Kits." + kitName + ".Inventory." + entry.getKey() + ".armorType").equalsIgnoreCase("leggings")) {
                 leggings = entry.getValue();
-            } else if (entry.getKey().equalsIgnoreCase("boots")) {
+
+            } else if (Main.kitStorage.get().getString("Kits." + kitName + ".Inventory." + entry.getKey() + ".armorType").equalsIgnoreCase("boots")) {
                 boots = entry.getValue();
+
             }
         }
     }

@@ -84,55 +84,59 @@ public class Kit {
         player.getInventory().clear();
         player.updateInventory();
         ConcurrentHashMap<Integer, ItemStack> itemStackHashMap = Kits.item;
-        System.out.print("Items: " + itemStackHashMap.size());
         for (Map.Entry<Integer, ItemStack> entry : itemStackHashMap.entrySet()) {
             if (entry.getValue().getType().equals(Material.LEATHER_HELMET) || entry.getValue().getType().equals(Material.LEATHER_CHESTPLATE)
                     || entry.getValue().getType().equals(Material.LEATHER_LEGGINGS) || entry.getValue().getType().equals(Material.LEATHER_BOOTS)) {
-                System.out.print("Found Armor");
                 if (Main.kitStorage.get().getBoolean("Kits." + name + ".coloredArmor")) {
-                    System.out.print("Is Colored");
                     KitArmorSet kitArmorSet = new KitArmorSet(name);
-                    kitArmorSet.listIDs();
 
-
-                    ItemStack itemStack = null;
+                    ItemStack itemStack;
                     if (entry.getValue().getType().equals(Material.LEATHER_HELMET)) {
+                        System.out.print("Helmet");
                         itemStack = kitArmorSet.getHelmet();
+                        ItemStack itemStackEdit = setColor(itemStack, player);
+                        player.getInventory().setHelmet(itemStackEdit);
                     } else if (entry.getValue().getType().equals(Material.LEATHER_CHESTPLATE)) {
+                        System.out.print("Chest");
                         itemStack = kitArmorSet.getChestplate();
+                        ItemStack itemStackEdit = setColor(itemStack, player);
+                        player.getInventory().setChestplate(itemStackEdit);
                     } else if (entry.getValue().getType().equals(Material.LEATHER_LEGGINGS)) {
+                        System.out.print("Legs");
                         itemStack = kitArmorSet.getLeggings();
+                        ItemStack itemStackEdit = setColor(itemStack, player);
+                        player.getInventory().setLeggings(itemStackEdit);
                     } else if (entry.getValue().getType().equals(Material.LEATHER_BOOTS)) {
+                        System.out.print("Boots");
                         itemStack = kitArmorSet.getBoots();
-                    }
-
-                    if (itemStack != null) {
-                        LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
-                        Color color;
-                        if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("red"))) {
-                            color = Color.fromRGB(255, 0, 0);
-                        } else if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("blue"))) {
-                            color = Color.fromRGB(0, 0, 255);
-                        } else {
-                            color = Color.WHITE;
-                        }
-
-                        leatherArmorMeta.setColor(color);
-                        entry.getValue().setItemMeta(leatherArmorMeta);
-
-                        if (entry.getValue().getType().equals(Material.LEATHER_HELMET)) {
-                            player.getInventory().setHelmet(itemStack);
-                        } else if (entry.getValue().getType().equals(Material.LEATHER_CHESTPLATE)) {
-                            player.getInventory().setChestplate(itemStack);
-                        } else if (entry.getValue().getType().equals(Material.LEATHER_LEGGINGS)) {
-                            player.getInventory().setLeggings(itemStack);
-                        } else if (entry.getValue().getType().equals(Material.LEATHER_BOOTS)) {
-                            player.getInventory().setBoots(itemStack);
-                        }
-
-                        // TODO: Not setting armor?
+                        ItemStack itemStackEdit = setColor(itemStack, player);
+                        player.getInventory().setBoots(itemStackEdit);
                     }
                 }
+
+
+//                        leatherArmorMeta.setColor(color);
+//                        entry.getValue().setItemMeta(leatherArmorMeta);
+//
+//                        if (entry.getValue().getType().equals(Material.LEATHER_HELMET)) {
+//                            System.out.print("Helmet Detected");
+//                            //player.getInventory().setHelmet(itemStack);
+//                            player.getInventory().setItem(5, itemStack);
+//                        } else if (entry.getValue().getType().equals(Material.LEATHER_CHESTPLATE)) {
+//                            System.out.print("Chestplate Detected");
+//                            //player.getInventory().setChestplate(itemStack);
+//                            player.getInventory().setItem(6, itemStack);
+//                        } else if (entry.getValue().getType().equals(Material.LEATHER_LEGGINGS)) {
+//                            System.out.print("Leggings Detected");
+//                            //player.getInventory().setLeggings(itemStack);
+//                            player.getInventory().setItem(7, itemStack);
+//                        } else if (entry.getValue().getType().equals(Material.LEATHER_BOOTS)) {
+//                            System.out.print("Boots Detected");
+//                            //player.getInventory().setBoots(itemStack);
+//                            player.getInventory().setItem(8, itemStack);
+//                        }
+
+
 
             } else {
                 System.out.print("Slot Num: " + entry.getKey());
@@ -150,6 +154,28 @@ public class Kit {
         if (potionEffect != null) {
             player.addPotionEffect(new PotionEffect(potionEffect.getType(), 1000000, potionEffect.getAmplifier()));
         }
+    }
+
+    private ItemStack setColor(ItemStack itemStack, Player player) {
+        if (itemStack != null) {
+            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+            Color color;
+            if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("red"))) {
+                color = Color.fromRGB(255, 0, 0);
+                System.out.print("RED");
+            } else if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("blue"))) {
+                color = Color.fromRGB(0, 0, 255);
+                System.out.print("BLUE");
+            } else {
+                color = Color.WHITE;
+                System.out.print("WHITE");
+            }
+
+            leatherArmorMeta.setColor(color);
+            leatherArmorMeta.setUnbreakable(true);
+            itemStack.setItemMeta(leatherArmorMeta);
+        }
+        return itemStack;
     }
 
 }
