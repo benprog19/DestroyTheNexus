@@ -19,6 +19,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 /**
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
  * Created by Ben on 10/3/2017.
@@ -26,12 +29,19 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DeathEvent implements Listener {
 
+    public static ArrayList<UUID> deadPlayers = new ArrayList<>();
+
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
         if (Players.isPlayer(player)) {
             Team red = Teams.getTeamByName("red");
             Team blue = Teams.getTeamByName("blue");
+
+            if (!deadPlayers.contains(player.getUniqueId())) {
+                deadPlayers.add(player.getUniqueId());
+            }
+
             if (red != null && blue != null) {
                 e.getDrops().clear();
                 player.getInventory().clear();
@@ -88,6 +98,11 @@ public class DeathEvent implements Listener {
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
                 player.getWorld().playEffect(player.getLocation(), Effect.EXPLOSION_LARGE, 1);
                 player.sendMessage(ChatColor.GREEN + "You have been revived!");
+
+                if (deadPlayers.contains(player.getUniqueId())) {
+                    deadPlayers.remove(player.getUniqueId());
+                }
+
                 Kit kit = Kits.getKitByPlayer(player);
                 if (kit != null) {
                     kit.setInventory(player);

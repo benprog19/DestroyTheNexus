@@ -67,7 +67,7 @@ public class NexusBlockBreakEvent implements Listener {
                                     && redNexusCorner2.getBlockY() >= e.getBlock().getY() && redNexusCorner2.getBlockZ() >= e.getBlock().getZ()) {
                                 blocksRed++;
                                 int dmg = calculateNexusDamage(red, redNexusCorner1, redNexusCorner2);
-                                Bukkit.broadcastMessage(ChatColor.GOLD + "Team " + ChatColor.RED + red.getName() + "'s Nexus At " + ChatColor.GOLD + "" + ChatColor.BOLD + dmg + "%");
+                                Bukkit.broadcastMessage(ChatColor.GOLD + "Team " + ChatColor.RED + red.getName() + "'s Nexus Shield At " + ChatColor.GOLD + "" + ChatColor.BOLD + (100 - dmg) + "% Health");
                                 e.setDropItems(false);
                                 if (dmg == 100) {
                                     Bukkit.broadcastMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE TEAM WINS!");
@@ -86,7 +86,7 @@ public class NexusBlockBreakEvent implements Listener {
                                     && blueNexusCorner2.getBlockY() >= e.getBlock().getY() && blueNexusCorner2.getBlockZ() >= e.getBlock().getZ()) {
                                 blocksBlue++;
                                 int dmg = calculateNexusDamage(blue, blueNexusCorner1, blueNexusCorner2);
-                                Bukkit.broadcastMessage(ChatColor.GOLD + "Team " + ChatColor.BLUE + blue.getName() + "'s Nexus At " + ChatColor.GOLD + "" + ChatColor.BOLD + dmg + "%");
+                                Bukkit.broadcastMessage(ChatColor.GOLD + "Team " + ChatColor.BLUE + blue.getName() + "'s Nexus Shield At " + ChatColor.GOLD + "" + ChatColor.BOLD + (100 - dmg) + "% Health");
                                 e.setDropItems(false);
                                 if (dmg == 100) {
                                     Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "RED TEAM WINS!");
