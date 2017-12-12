@@ -8,6 +8,7 @@ import fuji.dtn.commands.DTNCommand;
 import fuji.dtn.commands.KitCommand;
 import fuji.dtn.events.*;
 import fuji.dtn.game.GameState;
+import fuji.dtn.game.Lobby;
 import fuji.dtn.game.Spectators;
 import fuji.dtn.kits.Kits;
 import fuji.dtn.storage.ArenaStorage;
@@ -147,6 +148,7 @@ public class Main extends JavaPlugin {
 
         new Kits();
         new Arenas();
+        new Lobby();
         GameState.setGameState(GameState.WAITING);
     }
 

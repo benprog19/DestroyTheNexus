@@ -6,10 +6,11 @@ import fuji.dtn.kits.Kits;
 import fuji.dtn.main.Main;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Team;
-import fuji.dtn.util.InstantFireworkUtil;
+import fuji.dtn.teams.Teams;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -100,29 +101,57 @@ public class GameTimer {
             @Override
             public void run() {
                 count--;
-                if (count == 120 || count == 60 || count == 30 || count == 25 || count == 20 || count == 15 || count == 10 || (count <= 5 && count > 0) ) {
+                endingEffects(winningTeam);
+                if (count == 120 || count == 60 || count == 30 || count == 25 || count == 20 || count == 15 || count == 10 || (count <= 5 && count > 0)) {
                     for (int i = 0; i < players.size(); i++) {
                         Player player = Bukkit.getPlayer(players.get(i));
                         if (player.isOnline()) {
                             player.sendMessage(ChatColor.GOLD + "Match rotating in " + ChatColor.RED + count + " seconds...");
-                            final FireworkEffect red = FireworkEffect.builder().flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.RED).build();
 
-                             final FireworkEffect blue = FireworkEffect.builder().flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.BLUE).build();
-
-                            if (winningTeam.getColor().equals(ChatColor.RED)) {
-                                new InstantFireworkUtil(red,
-                                        new Location(player.getWorld(), player.getLocation().getX(), player.getLocation().getY() + 2,
-                                        player.getLocation().getZ()));
-                            } else if (winningTeam.getColor().equals(ChatColor.BLUE)) {
-                                new InstantFireworkUtil(blue,
-                                        new Location(player.getWorld(), player.getLocation().getX(), player.getLocation().getY() + 2,
-                                                player.getLocation().getZ()));
-                            }
                         }
+                    }
+                } else if (count == 0) {
+                    cancel();
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.sendMessage(ChatColor.GREEN + "Teleporting to lobby...");
+                        player.teleport(Lobby.getLobbyLoc());
                     }
                 }
             }
         }.runTaskTimer(JavaPlugin.getPlugin(Main.class), 0L, 20L);
+    }
+
+    private void endingEffects(Team winningTeam) {
+        if (winningTeam.equals(Teams.getTeamByName("red"))) {
+            Location blueLoc = Rotation.getCurrentArena().getBlueLocation();
+            Location redLoc = Rotation.getCurrentArena().getRedLocation();
+            Firework firework = (Firework) redLoc.getWorld().spawnEntity(redLoc, EntityType.FIREWORK);
+            FireworkMeta meta = firework.getFireworkMeta();
+            FireworkEffect redFw = FireworkEffect.builder().flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.RED).build();
+            meta.addEffect(redFw);
+            meta.setPower(2);
+            firework.setFireworkMeta(meta);
+            for (int i = 0; i < 5; i++) {
+                //Entity tntPrimedBlue = Bukkit.getWorld(blueLoc.getWorld().toString()).spawnEntity(new Location(blueLoc.getWorld(), blueLoc.getBlockX(), blueLoc.getBlockY() + 20, blueLoc.getBlockZ()), TNTPrimed.class);
+                TNTPrimed tnt = blueLoc.getWorld().spawn(blueLoc.add(0, 20, 0), TNTPrimed.class);
+                tnt.setGlowing(true);
+            }
+        } else if (winningTeam.equals(Teams.getTeamByName("blue"))) {
+            Location redLoc = Rotation.getCurrentArena().getRedLocation();
+            Location blueLoc = Rotation.getCurrentArena().getBlueLocation();
+
+            Firework firework = (Firework) blueLoc.getWorld().spawnEntity(blueLoc, EntityType.FIREWORK);
+            FireworkMeta meta = firework.getFireworkMeta();
+            FireworkEffect redFw = FireworkEffect.builder().flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.BLUE).build();
+            meta.addEffect(redFw);
+            meta.setPower(2);
+            firework.setFireworkMeta(meta);
+
+            for (int i = 0; i < 5; i++) {
+                TNTPrimed tnt = redLoc.getWorld().spawn(redLoc.add(0, 20, 0), TNTPrimed.class);
+                tnt.setGlowing(true);
+            }
+        }
     }
 
     public void stop() {

@@ -4,10 +4,7 @@ import fuji.dtn.arena.Arena;
 import fuji.dtn.arena.Arenas;
 import fuji.dtn.arena.ResetArena;
 import fuji.dtn.arena.SelectionMode;
-import fuji.dtn.game.Game;
-import fuji.dtn.game.GameState;
-import fuji.dtn.game.Players;
-import fuji.dtn.game.Spectators;
+import fuji.dtn.game.*;
 import fuji.dtn.main.Main;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Teams;
@@ -61,6 +58,9 @@ public class DTNCommand implements CommandExecutor {
                     } else if (args[0].equalsIgnoreCase("game")) {
                         player.sendMessage(ChatColor.GOLD + "/dtn game start");
                         player.sendMessage(ChatColor.GOLD + "/dtn game stop");
+                    } else if (args[0].equalsIgnoreCase("lobby")) {
+                        player.sendMessage(ChatColor.GOLD + "/dtn lobby set");
+                        player.sendMessage(ChatColor.GOLD + "/dtn lobby tp");
                     }
                 } else if (args.length == 2) {
                     if (args[0].equalsIgnoreCase("arena")) {
@@ -98,6 +98,14 @@ public class DTNCommand implements CommandExecutor {
                             if (GameState.getGameState().equals(GameState.INGAME)) {
                                 Game.endGame(Teams.getTeamFromPlayer(player));
                             }
+                        }
+                    } else if (args[0].equalsIgnoreCase("lobby")) {
+                        if (args[1].equalsIgnoreCase("set")) {
+                            new Lobby(player.getLocation());
+                            player.sendMessage(ChatColor.GREEN + "Lobby has been set.");
+                        } else if (args[1].equalsIgnoreCase("tp")) {
+                            player.teleport(Lobby.getLobbyLoc());
+                            player.sendMessage(ChatColor.GREEN + "Teleporting to lobby location.");
                         }
                     }
 

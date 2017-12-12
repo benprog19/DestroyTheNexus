@@ -33,10 +33,13 @@ public class PvPEvent implements Listener {
                 if (Players.isPlayer(player) && Players.isPlayer(damager)) {
                     if (!DeathEvent.deadPlayers.contains(damager.getUniqueId())) {
                         if (Teams.getTeamFromPlayer(player) != Teams.getTeamFromPlayer(damager)) {
-                            player.spawnParticle(
-                                    Particle.BLOCK_CRACK,
-                                    player.getEyeLocation(), 1, 0, 0, 0, new MaterialData(Material.REDSTONE_BLOCK));
+                            for (int i = 0; i < 20; i++) {
+                                player.spawnParticle(
+                                        Particle.BLOCK_CRACK,
+                                        player.getEyeLocation(), 1, 0, 0, 0, new MaterialData(Material.REDSTONE_BLOCK));
+                            }
                             player.getWorld().playSound(player.getEyeLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
+
                         } else if (Teams.getTeamFromPlayer(player) == Teams.getTeamFromPlayer(damager)) {
                             e.setCancelled(true);
                             damager.sendMessage(ChatColor.RED + "You cannot damage a teammate.");

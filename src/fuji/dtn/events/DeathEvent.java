@@ -96,6 +96,7 @@ public class DeathEvent implements Listener {
                 player.setFoodLevel(20);
                 player.setAllowFlight(false);
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 255));
                 player.getWorld().playEffect(player.getLocation(), Effect.EXPLOSION_LARGE, 1);
                 player.sendMessage(ChatColor.GREEN + "You have been revived!");
 
