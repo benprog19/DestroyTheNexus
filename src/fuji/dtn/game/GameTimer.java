@@ -45,49 +45,65 @@ public class GameTimer {
             @Override
             public void run() {
                 count--;
-                if (count == 120 || count == 60 || count == 30 || count == 25 || count == 20 || count == 15 || count == 10 || (count <= 5 && count > 0) ) {
-                    for (int i = 0; i < players.size(); i++) {
-                        Player player = Bukkit.getPlayer(players.get(i));
-                        if (player.isOnline()) {
-                            player.sendMessage(ChatColor.GOLD + "Match starting in " + ChatColor.RED + count + " seconds...");
+
+                if (Rotation.getCurrentArena() != null) {
+                    if ((Bukkit.getOnlinePlayers().size() < Rotation.getCurrentArena().getMinPlayers())) {
+                        GameState.setGameState(GameState.WAITING);
+                        cancel();
+                        for (Player pls : Bukkit.getOnlinePlayers()) {
+                            pls.teleport(Lobby.getLobbyLoc());
+                            pls.sendMessage(ChatColor.RED + "A player has left and there is no longer enough players to start playing the game. Please wait for more players.");
                         }
                     }
-                }
 
-                if (count == 0) {
-                    ResetArena.resetArena(Rotation.getCurrentArena());
-                    Players.teleportPlayerToTeams(null, true);
-                    GameState.setGameState(GameState.INGAME);
-                    for (int i = 0; i < players.size(); i++) {
-                        Player player = Bukkit.getPlayer(players.get(i));
-                        System.out.print(players.size() + " players.");
-                        if (player.isOnline()) {
-                            player.setHealth(20);
-                            player.setFoodLevel(20);
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 255));
-                            player.sendMessage(ChatColor.GREEN + "Match starting... ");
-                            player.setGameMode(GameMode.SURVIVAL);
-                            player.getWorld().strikeLightningEffect(Rotation.getCurrentArena().getRedLocation());
-                            player.getWorld().strikeLightningEffect(Rotation.getCurrentArena().getBlueLocation());
-                            Kit kit = Kits.getKitByPlayer(player);
 
-                            if (kit != null) {
-                                kit.setInventory(player);
-                                if (kit.getPotionEffect() != null) {
-                                    player.addPotionEffect(PotionEffectType.getByName(kit.getPotionEffect().getType().toString()).createEffect(kit.getPotionEffect().getDuration(), kit.getPotionEffect().getAmplifier()));
-                                }
-                            } else {
-                                Kit adefault = Kits.getKitByName("Standard");
-                                if (adefault != null) {
-                                    adefault.addPlayer(player);
-                                    adefault.setInventory(player);
+                    if (count == 120 || count == 60 || count == 30 || count == 25 || count == 20 || count == 15 || count == 10 || (count <= 5 && count > 0)) {
+                        for (int i = 0; i < players.size(); i++) {
+                            Player player = Bukkit.getPlayer(players.get(i));
+                            if (player.isOnline()) {
+                                player.sendMessage(ChatColor.GOLD + "Match starting in " + ChatColor.RED + count + " seconds...");
+                            }
+                        }
+                    }
+
+                    if (count == 0) {
+                        ResetArena.resetArena(Rotation.getCurrentArena());
+                        Players.teleportPlayerToTeams(null, true);
+                        GameState.setGameState(GameState.INGAME);
+                        for (int i = 0; i < players.size(); i++) {
+                            Player player = Bukkit.getPlayer(players.get(i));
+                            System.out.print(players.size() + " players.");
+                            if (player.isOnline()) {
+                                player.setHealth(20);
+                                player.setFoodLevel(20);
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 255));
+                                player.sendMessage(ChatColor.GREEN + "Match starting... ");
+                                player.setGameMode(GameMode.SURVIVAL);
+                                player.getWorld().strikeLightningEffect(Rotation.getCurrentArena().getRedLocation());
+                                player.getWorld().strikeLightningEffect(Rotation.getCurrentArena().getBlueLocation());
+                                Kit kit = Kits.getKitByPlayer(player);
+
+                                if (kit != null) {
+                                    kit.setInventory(player);
+                                    if (kit.getPotionEffect() != null) {
+                                        player.addPotionEffect(PotionEffectType.getByName(kit.getPotionEffect().getType().toString()).createEffect(kit.getPotionEffect().getDuration(), kit.getPotionEffect().getAmplifier()));
+                                    }
+                                } else {
+                                    Kit adefault = Kits.getKitByName("Standard");
+                                    if (adefault != null) {
+                                        adefault.addPlayer(player);
+                                        adefault.setInventory(player);
+                                    }
+
                                 }
 
                             }
-
                         }
+                        cancel();
                     }
+                } else {
                     cancel();
+                    Bukkit.broadcastMessage(ChatColor.RED + "There was an error while loading an arena. There is a possibility there are no arenas to play.");
                 }
             }
         }.runTaskTimer(JavaPlugin.getPlugin(Main.class), 0L, 20L);
@@ -115,6 +131,11 @@ public class GameTimer {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.sendMessage(ChatColor.GREEN + "Teleporting to lobby...");
                         player.teleport(Lobby.getLobbyLoc());
+                        player.setHealth(20);
+                        player.getActivePotionEffects().clear();
+                        player.getInventory().clear();
+                        player.updateInventory();
+                        player.setGameMode(GameMode.ADVENTURE);
                     }
                 }
             }

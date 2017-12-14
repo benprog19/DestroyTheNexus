@@ -36,6 +36,7 @@ public class Team {
         players.add(uuid);
     }
 
+    @Deprecated
     public void changeColor(ChatColor color) {
         this.color = color;
     }
@@ -80,20 +81,28 @@ public class Team {
         return players.size();
     }
 
+    @Deprecated
     public void setPercent(int newPercent) {
         percent = newPercent;
     }
 
+    @Deprecated
     public int subtractPercent(int sub) {
         return percent - sub;
     }
 
+    @Deprecated
     public int addPercent(int add) {
         return percent + add;
     }
 
+    @Deprecated
     public int getPercent() {
         return percent;
+    }
+
+    public ArrayList<UUID> getPlayers() {
+        return players;
     }
 
 }

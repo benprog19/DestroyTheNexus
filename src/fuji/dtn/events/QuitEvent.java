@@ -1,5 +1,6 @@
 package fuji.dtn.events;
 
+import fuji.dtn.game.GameState;
 import fuji.dtn.game.Players;
 import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
@@ -32,14 +33,16 @@ public class QuitEvent implements Listener {
         } else {
             e.setQuitMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "] " + ChatColor.GRAY + player.getName());
         }
-
-        int size = Bukkit.getOnlinePlayers().size();
-        if (size <= 2) {
-            Bukkit.reload();
-        } else {
-            int playersSize = Players.getPlayers().size();
-            if (playersSize <= 2) {
+        if (GameState.getGameState().equals(GameState.INGAME)) {
+            int size = Bukkit.getOnlinePlayers().size();
+            System.out.print("Size: " + size);
+            if (size <= 1) {
                 Bukkit.reload();
+            } else {
+                int playersSize = Players.getPlayers().size();
+                if (playersSize <= 1) {
+                    Bukkit.reload();
+                }
             }
         }
     }

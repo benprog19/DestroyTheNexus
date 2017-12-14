@@ -24,8 +24,8 @@ public class Rotation {
         int amount = arenas.size();
         for (int i = 0; i < amount; i++) {
             Arena arena = arenas.get(i);
-            if (arena.isPlayable()) {
-                    possibleChoices.add(arena);
+            if (arena.isPlayable() && (Bukkit.getOnlinePlayers().size() >= arena.getMinPlayers())) {
+                possibleChoices.add(arena);
             }
         }
 
@@ -35,11 +35,12 @@ public class Rotation {
             Arena arena = possibleChoices.get(rand);
             if (arena.isPlayable()) {
                 currentArena = arena;
-                Bukkit.broadcastMessage(ChatColor.GOLD + "Rotation set to " + getCurrentArena().getName() + " by " + getCurrentArena().getCreator());
+                Bukkit.broadcastMessage(ChatColor.GREEN + "There is a total of " + possibleChoices.size() + " arena(s) to play.");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "Rotation set to " + ChatColor.RED + getCurrentArena().getName() + ChatColor.GOLD + " created by " + ChatColor.RED + getCurrentArena().getCreator());
             }
         } else {
-            Bukkit.broadcastMessage(ChatColor.RED + "No available arenas to play.");
             currentArena = null;
+            throw new IllegalStateException();
         }
     }
 
