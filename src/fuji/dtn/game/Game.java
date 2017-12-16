@@ -1,6 +1,7 @@
 package fuji.dtn.game;
 
 import fuji.dtn.arena.Arena;
+import fuji.dtn.arena.ResetArena;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
@@ -29,6 +30,7 @@ public class Game {
     }
 
     public void beginGame() {
+        ResetArena.resetArena(arena);
         GameState.setGameState(GameState.STARTING);
         GameTimer timer = new GameTimer(30, players);
         timer.startCountdown();
@@ -68,6 +70,38 @@ public class Game {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "restart");
         }
         timer.endingGame(winner, loser);
+    }
+
+    public static void tryStart() {
+        if (GameState.getGameState().equals(GameState.WAITING)) {
+            if (Bukkit.getOnlinePlayers().size() >= 2) {
+                Players.getPlayers().clear();
+
+                Team red = Teams.getTeamByName("red");
+                Team blue = Teams.getTeamByName("blue");
+
+                red.getPlayers().clear();
+                blue.getPlayers().clear();
+
+                for (Player pls : Bukkit.getOnlinePlayers()) {
+                    Players.addPlayer(pls);
+                    pls.sendMessage(ChatColor.GREEN + "You have been added into the game.");
+                }
+
+                try {
+                    new Rotation();
+                    Game game = new Game(Rotation.getCurrentArena(), Players.getPlayers());
+                    game.beginGame();
+                } catch (IllegalStateException ex) {
+                    Bukkit.broadcastMessage(ChatColor.RED + "There are no available games to play.");
+                }
+
+
+            } else {
+                Bukkit.broadcastMessage(ChatColor.RED + "You must wait until more players join before the game begins.");
+            }
+        }
+
     }
 
     public void forceInGame() {

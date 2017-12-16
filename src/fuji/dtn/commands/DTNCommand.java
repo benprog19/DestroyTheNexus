@@ -80,7 +80,11 @@ public class DTNCommand implements CommandExecutor {
                     } else if (args[0].equalsIgnoreCase("game")) {
                         if (args[1].equalsIgnoreCase("start")) {
                             if (Rotation.getCurrentArena() == null) {
-                                new Rotation();
+                                try {
+                                    new Rotation();
+                                } catch (IllegalStateException ex) {
+                                    player.sendMessage(ChatColor.RED + "You cannot start the game at this time.");
+                                }
                             }
 
                             if (Rotation.getCurrentArena() != null) {

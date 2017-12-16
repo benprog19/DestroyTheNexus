@@ -4,7 +4,6 @@ import fuji.dtn.game.*;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,31 +30,20 @@ public class JoinEvent implements Listener {
             }
 
             if (GameState.getGameState().equals(GameState.WAITING)) {
-                if (Bukkit.getOnlinePlayers().size() >= 2) {
-                    Players.getPlayers().clear();
+                Game.tryStart();
+            } else if (GameState.getGameState().equals(GameState.STARTING)) {
+                Team red = Teams.getTeamByName("red");
+                Team blue = Teams.getTeamByName("blue");
 
-                    Team red = Teams.getTeamByName("red");
-                    Team blue = Teams.getTeamByName("blue");
-
-                    red.getPlayers().clear();
-                    blue.getPlayers().clear();
-
-                    for (Player pls : Bukkit.getOnlinePlayers()) {
-                        Players.addPlayer(pls);
-                        pls.sendMessage(ChatColor.GREEN + "You have been added into the game.");
-                    }
-
-                    try {
-                        new Rotation();
-                        Game game = new Game(Rotation.getCurrentArena(), Players.getPlayers());
-                        game.beginGame();
-                    } catch (IllegalStateException ex) {
-                        Bukkit.broadcastMessage(ChatColor.RED + "There are no available games to play.");
-                    }
-
-
-                } else {
-                    player.sendMessage(ChatColor.RED + "You must wait until more players join before the game begins.");
+                if (red.getPlayers().size() > blue.getPlayers().size()) {
+                    blue.addPlayer(player);
+                    player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "You have joined the BLUE Team.");
+                } else if (blue.getPlayers().size() > red.getPlayers().size()) {
+                    red.addPlayer(player);
+                    player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "You have joined the RED Team.");
+                } else if (red.getPlayers().size() == blue.getPlayers().size()) {
+                    red.addPlayer(player);
+                    player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "You have joined the RED Team.");
                 }
             }
 
@@ -65,4 +53,6 @@ public class JoinEvent implements Listener {
             player.teleport(Rotation.getCurrentArena().getRedLocation());
         }
     }
+
+
 }

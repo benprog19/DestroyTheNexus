@@ -39,7 +39,7 @@ public class GameTimer {
     }
 
     public void startCountdown() {
-        Players.fixPlayerSetup(players);
+
 
         runnable = new BukkitRunnable() {
             @Override
@@ -67,6 +67,7 @@ public class GameTimer {
                     }
 
                     if (count == 0) {
+                        Players.fixPlayerSetup(players);
                         ResetArena.resetArena(Rotation.getCurrentArena());
                         Players.teleportPlayerToTeams(null, true);
                         GameState.setGameState(GameState.INGAME);
@@ -128,7 +129,9 @@ public class GameTimer {
                     }
                 } else if (count == 0) {
                     cancel();
+                    ResetArena.resetArena(Rotation.getCurrentArena());
                     for (Player player : Bukkit.getOnlinePlayers()) {
+                        GameState.setGameState(GameState.WAITING);
                         player.sendMessage(ChatColor.GREEN + "Teleporting to lobby...");
                         player.teleport(Lobby.getLobbyLoc());
                         player.setHealth(20);
@@ -137,6 +140,7 @@ public class GameTimer {
                         player.updateInventory();
                         player.setGameMode(GameMode.ADVENTURE);
                     }
+                    Game.tryStart();
                 }
             }
         }.runTaskTimer(JavaPlugin.getPlugin(Main.class), 0L, 20L);
@@ -169,7 +173,7 @@ public class GameTimer {
             firework.setFireworkMeta(meta);
 
             for (int i = 0; i < 5; i++) {
-                TNTPrimed tnt = redLoc.getWorld().spawn(redLoc.add(0, 20, 0), TNTPrimed.class);
+                TNTPrimed tnt = redLoc.getWorld().spawn(redLoc.add(0, 1, 0), TNTPrimed.class);
                 tnt.setGlowing(true);
             }
         }
