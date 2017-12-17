@@ -32,7 +32,7 @@ public class Game {
     public void beginGame() {
         ResetArena.resetArena(arena);
         GameState.setGameState(GameState.STARTING);
-        GameTimer timer = new GameTimer(30, players);
+        GameTimer timer = new GameTimer(61, players);
         timer.startCountdown();
     }
 

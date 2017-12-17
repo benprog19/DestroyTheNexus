@@ -1,5 +1,6 @@
 package fuji.dtn.arena;
 
+import fuji.dtn.game.Lobby;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -58,7 +59,7 @@ public class ResetArena implements Listener {
             }
         for (Player pls : Bukkit.getOnlinePlayers()) {
             if (pls != null) {
-                pls.teleport(new Location(Bukkit.getWorlds().get(0), 0, 100, 0));
+                pls.teleport(Lobby.getLobbyLoc());
             }
         }
 

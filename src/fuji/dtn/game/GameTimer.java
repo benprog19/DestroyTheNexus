@@ -51,13 +51,14 @@ public class GameTimer {
                         GameState.setGameState(GameState.WAITING);
                         cancel();
                         for (Player pls : Bukkit.getOnlinePlayers()) {
+                            System.out.print(Lobby.getLobbyLoc().toString());
                             pls.teleport(Lobby.getLobbyLoc());
                             pls.sendMessage(ChatColor.RED + "A player has left and there is no longer enough players to start playing the game. Please wait for more players.");
                         }
                     }
 
 
-                    if (count == 120 || count == 60 || count == 30 || count == 25 || count == 20 || count == 15 || count == 10 || (count <= 5 && count > 0)) {
+                    if (count == 120 || count == 90 || count == 60 || count == 30 || count == 25 || count == 20 || count == 15 || count == 10 || (count <= 5 && count > 0)) {
                         for (int i = 0; i < players.size(); i++) {
                             Player player = Bukkit.getPlayer(players.get(i));
                             if (player.isOnline()) {
@@ -75,9 +76,13 @@ public class GameTimer {
                             Player player = Bukkit.getPlayer(players.get(i));
                             System.out.print(players.size() + " players.");
                             if (player.isOnline()) {
+                                for (Player pls : Bukkit.getOnlinePlayers()) {
+                                    pls.showPlayer(player);
+                                }
                                 player.setHealth(20);
                                 player.setFoodLevel(20);
                                 player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 255));
+                                player.getActivePotionEffects().clear();
                                 player.sendMessage(ChatColor.GREEN + "Match starting... ");
                                 player.setGameMode(GameMode.SURVIVAL);
                                 player.getWorld().strikeLightningEffect(Rotation.getCurrentArena().getRedLocation());
@@ -133,12 +138,19 @@ public class GameTimer {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         GameState.setGameState(GameState.WAITING);
                         player.sendMessage(ChatColor.GREEN + "Teleporting to lobby...");
-                        player.teleport(Lobby.getLobbyLoc());
+                        if (Lobby.getLobbyLoc().getWorld().getName() != null) {
+                            player.teleport(Lobby.getLobbyLoc());
+                        } else {
+                            player.sendMessage(ChatColor.RED + "Lobby location is invalid. Teleporting to your last known location.");
+                        }
                         player.setHealth(20);
-                        player.getActivePotionEffects().clear();
+                        player.removePotionEffect(PotionEffectType.INVISIBILITY);
                         player.getInventory().clear();
                         player.updateInventory();
                         player.setGameMode(GameMode.ADVENTURE);
+                        for (Player pls : Bukkit.getOnlinePlayers()) {
+                            pls.showPlayer(player);
+                        }
                     }
                     Game.tryStart();
                 }

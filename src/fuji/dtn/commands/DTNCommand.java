@@ -61,6 +61,8 @@ public class DTNCommand implements CommandExecutor {
                     } else if (args[0].equalsIgnoreCase("lobby")) {
                         player.sendMessage(ChatColor.GOLD + "/dtn lobby set");
                         player.sendMessage(ChatColor.GOLD + "/dtn lobby tp");
+                    } else if (args[0].equalsIgnoreCase("gamestate")) {
+                        player.sendMessage(ChatColor.GREEN + "Current state: " + GameState.getGameState().toString());
                     }
                 } else if (args.length == 2) {
                     if (args[0].equalsIgnoreCase("arena")) {

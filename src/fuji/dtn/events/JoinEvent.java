@@ -4,11 +4,14 @@ import fuji.dtn.game.*;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 /**
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -21,6 +24,15 @@ public class JoinEvent implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
+        player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        for (Player pls : Bukkit.getOnlinePlayers()) {
+            player.showPlayer(pls);
+        }
+
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
+        }
+
         if (GameState.getGameState() == GameState.WAITING || GameState.getGameState() == GameState.STARTING) {
             Players.addPlayer(player);
             if (Lobby.getLobbyLoc() != null) {

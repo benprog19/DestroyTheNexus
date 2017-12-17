@@ -3,6 +3,7 @@ package fuji.dtn.game;
 import fuji.dtn.main.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -30,7 +31,15 @@ public class Lobby {
     }
 
     public static Location getLobbyLoc() {
-        return lobbyLoc;
+        if (lobbyLoc != null) {
+            return lobbyLoc;
+        } else {
+            FileConfiguration section = Main.arenaStorage.get();
+            Location location = new Location(Bukkit.getWorld(section.getString("Lobby.world")), section.getDouble("Lobby.x"), section.getDouble("Lobby.y"), section.getDouble("Lobby.z"),
+                    section.getInt("Lobby.yaw"), section.getInt("Lobby.pitch"));
+            lobbyLoc = location;
+            return lobbyLoc;
+        }
     }
 
     public Lobby() {
