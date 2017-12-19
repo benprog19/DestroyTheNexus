@@ -1,13 +1,13 @@
 package fuji.dtn.events;
 
-import fuji.dtn.game.Game;
-import fuji.dtn.game.GameState;
-import fuji.dtn.game.Players;
-import fuji.dtn.main.Main;
-import fuji.dtn.rotation.Rotation;
-import fuji.dtn.teams.Team;
-import fuji.dtn.teams.Teams;
-import org.bukkit.*;
+import java.util.Iterator;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
@@ -17,9 +17,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import fuji.dtn.game.Game;
+import fuji.dtn.game.GameState;
+import fuji.dtn.game.Players;
+import fuji.dtn.main.Main;
+import fuji.dtn.rotation.Rotation;
+import fuji.dtn.teams.Team;
+import fuji.dtn.teams.Teams;
 
 /**
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -31,7 +35,8 @@ public class NexusBlockBreakEvent implements Listener {
     int blocksRed = 0;
     int blocksBlue = 0;
     
-    @EventHandler
+    @SuppressWarnings("deprecation")
+	@EventHandler
     public void onBreak(BlockBreakEvent e) {
         final Player player = e.getPlayer();
         if (GameState.getGameState() == GameState.INGAME) {
@@ -46,7 +51,7 @@ public class NexusBlockBreakEvent implements Listener {
                     Location blueNexusCorner1 = createLocation("blueNexusCorner1", section);
                     Location blueNexusCorner2 = createLocation("blueNexusCorner2", section);
 
-                    Location blockBroken = e.getBlock().getLocation();
+                    //Location blockBroken = e.getBlock().getLocation();
 
                     /*
                     Bukkit.broadcastMessage(" ");
@@ -106,11 +111,12 @@ public class NexusBlockBreakEvent implements Listener {
         }
     }
 
-    @EventHandler
+    @SuppressWarnings("deprecation")
+	@EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
         if (event.getEntity().getType() == EntityType.PRIMED_TNT) {
-            List blocks = event.blockList();
-            Iterator it = blocks.iterator();
+            List<Block> blocks = event.blockList();
+            Iterator<Block> it = blocks.iterator();
             while (it.hasNext()) {
                 Block block = (Block) it.next();
                 if (block.getType().equals(Material.WOOL)) {
@@ -123,7 +129,7 @@ public class NexusBlockBreakEvent implements Listener {
     }
 
     private int calculateNexusDamage(Team team, Location corner1, Location corner2) {
-        ArrayList<Block> blocks = new ArrayList<>();
+    	//ArrayList<Block> blocks = new ArrayList<>();
 //        System.out.print("Corner1: " + corner1.getBlockX() + "   Corner2: " + corner2.getBlockX());
 //        System.out.print("Corner1: " + corner1.getBlockY() + "   Corner2: " + corner2.getBlockY());
 //        System.out.print("Corner1: " + corner1.getBlockZ() + "   Corner2: " + corner2.getBlockZ());

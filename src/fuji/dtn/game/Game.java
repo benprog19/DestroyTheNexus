@@ -21,15 +21,15 @@ public class Game {
 
     static Arena arena;
     static ArrayList<UUID> players;
-
-    public Game(Arena arena, ArrayList<UUID> players) {
-        this.arena = arena;
-        this.players = players;
+    
+    public static void init(Arena arena, ArrayList<UUID> players) {
+        Game.arena = arena;
+        Game.players = players;
 
         GameState.setGameState(GameState.WAITING);
     }
 
-    public void beginGame() {
+    public static void beginGame() {
         ResetArena.resetArena(arena);
         GameState.setGameState(GameState.STARTING);
         GameTimer timer = new GameTimer(61, players);
@@ -90,8 +90,8 @@ public class Game {
 
                 try {
                     new Rotation();
-                    Game game = new Game(Rotation.getCurrentArena(), Players.getPlayers());
-                    game.beginGame();
+                    Game.init(Rotation.getCurrentArena(), Players.getPlayers());
+                    Game.beginGame();
                 } catch (IllegalStateException ex) {
                     Bukkit.broadcastMessage(ChatColor.RED + "There are no available games to play.");
                 }
@@ -104,15 +104,15 @@ public class Game {
 
     }
 
-    public void forceInGame() {
+    public static void forceInGame() {
         GameState.setGameState(GameState.INGAME);
     }
 
-    public void forceEndGame() {
+    public static void forceEndGame() {
         GameState.setGameState(GameState.ENDING);
     }
 
-    public void forceMaitence() {
+    public static void forceMaitence() {
         GameState.setGameState(GameState.SETTINGUP);
     }
 }
