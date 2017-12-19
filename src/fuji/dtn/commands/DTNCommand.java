@@ -19,6 +19,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -71,6 +73,31 @@ public class DTNCommand implements CommandExecutor {
                             if (Arenas.isRegistered(arenaName)) {
                                 Arena arena = Arenas.getArenaByName(arenaName);
                                 isPlayableList(player, arena);
+                                Location corner1 = arena.getArenaCorner1().getChunk().getBlock(8, 0, 8).getLocation();
+                                for (int y = 0; y < 200; y++) {
+                                    player.sendBlockChange(new Location(corner1.getWorld(), corner1.getBlockX(), y, corner1.getBlockZ()), Material.SEA_LANTERN, (byte) 0);
+                                }
+
+                                Location corner2 = arena.getArenaCorner2().getChunk().getBlock(8, 0, 8).getLocation();
+                                for (int y = 0; y < 200; y++) {
+                                    player.sendBlockChange(new Location(corner2.getWorld(), corner2.getBlockX(), y, corner2.getBlockZ()), Material.SEA_LANTERN, (byte) 0);
+                                }
+
+                                new BukkitRunnable() {
+
+                                    @Override
+                                    public void run() {
+                                        Location corner1 = arena.getArenaCorner1().getChunk().getBlock(8, 0, 8).getLocation();
+                                        for (int y = 0; y < 200; y++) {
+                                            player.sendBlockChange(new Location(corner1.getWorld(), corner1.getBlockX(), y, corner1.getBlockZ()), Material.AIR, (byte) 0);
+                                        }
+
+                                        Location corner2 = arena.getArenaCorner2().getChunk().getBlock(8, 0, 8).getLocation();
+                                        for (int y = 0; y < 200; y++) {
+                                            player.sendBlockChange(new Location(corner2.getWorld(), corner2.getBlockX(), y, corner2.getBlockZ()), Material.AIR, (byte) 0);
+                                        }
+                                    }
+                                }.runTaskLater(JavaPlugin.getPlugin(Main.class), 500L);
                             } else {
                                 sendArenaSuggestions(player);
                             }

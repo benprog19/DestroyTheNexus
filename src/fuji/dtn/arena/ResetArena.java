@@ -1,6 +1,6 @@
 package fuji.dtn.arena;
 
-import fuji.dtn.game.Lobby;
+import fuji.dtn.main.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldSaveEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
 
@@ -36,9 +38,17 @@ public class ResetArena implements Listener {
             }
         }
 
-        for (Player pls : Bukkit.getOnlinePlayers()) {
-            pls.teleport(chunkCorner1.getBlock(8, 64, 8).getLocation());
-        }
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                for (Player pls : Bukkit.getOnlinePlayers()) {
+                    if (pls != null) {
+                        pls.teleport(chunkCorner1.getBlock(8, 64, 8).getLocation()); //TODO: change this back to the lobby
+                    }
+                }
+            }
+        }.runTaskLater(JavaPlugin.getPlugin(Main.class), 3L);
     }
 
     public static void resetArena(Arena arena) {
@@ -50,18 +60,24 @@ public class ResetArena implements Listener {
 
         Chunk chunkCorner1 = arena.getArenaCorner1().getChunk();
         Chunk chunkCorner2 = arena.getArenaCorner2().getChunk();
-            for (int x = chunkCorner1.getX(); x < chunkCorner2.getX(); x++) {
-                for (int z = chunkCorner1.getZ(); z < chunkCorner2.getZ(); z++) {
-                    Chunk chunk = chunkCorner1.getWorld().getChunkAt(x, z);
-                    chunk.unload(false);
-                    chunk.load();
-                }
-            }
-        for (Player pls : Bukkit.getOnlinePlayers()) {
-            if (pls != null) {
-                pls.teleport(Lobby.getLobbyLoc());
+        for (int x = chunkCorner1.getX(); x < chunkCorner2.getX(); x++) {
+            for (int z = chunkCorner1.getZ(); z < chunkCorner2.getZ(); z++) {
+                Chunk chunk = chunkCorner1.getWorld().getChunkAt(x, z);
+                chunk.unload(false);
+                chunk.load();
             }
         }
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                for (Player pls : Bukkit.getOnlinePlayers()) {
+                    if (pls != null) {
+                        pls.teleport(chunkCorner1.getBlock(8, 64, 8).getLocation()); //TODO: change this back to the lobby
+                    }
+                }
+            }
+        }.runTaskLater(JavaPlugin.getPlugin(Main.class), 3L);
 
 
     }

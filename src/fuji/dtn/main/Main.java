@@ -47,6 +47,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Selection(), this);
         getServer().getPluginManager().registerEvents(new Spectators(), this);
         getServer().getPluginManager().registerEvents(new ResetArena(), this);
+
         getServer().getPluginManager().registerEvents(new NexusBlockBreakEvent(), this);
         getServer().getPluginManager().registerEvents(new DeathEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
@@ -55,6 +56,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new HungerEvent(), this);
         getServer().getPluginManager().registerEvents(new DamageEvent(), this);
+        getServer().getPluginManager().registerEvents(new MoveEvent(), this);
 
         red = new Team("Red", ChatColor.RED, new ArrayList<>());
         blue = new Team("Blue", ChatColor.BLUE, new ArrayList<>());
