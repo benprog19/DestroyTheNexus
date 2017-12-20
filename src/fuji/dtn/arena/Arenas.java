@@ -1,16 +1,15 @@
 package fuji.dtn.arena;
 
-import fuji.dtn.main.Main;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-import static fuji.dtn.teams.Teams.teams;
+import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+
+import fuji.dtn.main.Main;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -79,7 +78,7 @@ public class Arenas {
     }
 
     public static void unregisterArenas(Arena arena) {
-        teams.remove(arena);
+        arenas.remove(arena);
         Main.arenaStorage.get().set("Arenas." + arena.getName(), null);
         Main.arenaStorage.save();
     }

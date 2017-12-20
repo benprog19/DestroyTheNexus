@@ -61,7 +61,8 @@ public class DeathEvent implements Listener {
         }
     }
 
-    private void predeath(Player player, Player killer) {
+    @SuppressWarnings("deprecation")
+	private void predeath(Player player, Player killer) {
         player.setHealth(20);
         for (int pls = 0; pls < Players.getPlayers().size(); pls++) {
             Player pls1 = Bukkit.getPlayer(Players.getPlayers().get(pls));
@@ -78,7 +79,8 @@ public class DeathEvent implements Listener {
     private void afterdeath(final Player player, Player killer) {
         new BukkitRunnable() {
 
-            @Override
+            @SuppressWarnings("deprecation")
+			@Override
             public void run() {
                 Players.teleportPlayerToTeams(player, false);
                 player.setHealth(20);

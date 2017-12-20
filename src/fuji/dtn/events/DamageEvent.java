@@ -19,7 +19,6 @@ public class DamageEvent implements Listener {
         final Entity entity = e.getEntity();
 
         if (entity instanceof Player) {
-            Player player = (Player) entity;
             if (GameState.getGameState().equals(GameState.INGAME)) {
                 e.setCancelled(false);
             } else{

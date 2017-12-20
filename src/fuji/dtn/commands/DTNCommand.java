@@ -33,7 +33,8 @@ import java.util.regex.Pattern;
 public class DTNCommand implements CommandExecutor {
 
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         Player player = (Player) commandSender;
         if (player.hasPermission("destroythenexus.admin")) {
@@ -123,8 +124,8 @@ public class DTNCommand implements CommandExecutor {
                                         players.sendMessage(ChatColor.BLUE + "You have been added into the Game.");
                                     }
                                 }
-                                Game game = new Game(Rotation.getCurrentArena(), Players.getPlayers());
-                                game.beginGame();
+                                Game.init(Rotation.getCurrentArena(), Players.getPlayers());
+                                Game.beginGame();
                                 player.sendMessage(ChatColor.GOLD + "Game has been started with " + ChatColor.RED + Players.getPlayers().size() + " players" + ChatColor.GOLD + " playing " + ChatColor.RED + Rotation.getCurrentArena().getName() + " by " + Rotation.getCurrentArena().getCreator());
                             }
                         } else if (args[1].equalsIgnoreCase("stop")) {
@@ -342,11 +343,5 @@ public class DTNCommand implements CommandExecutor {
         player.sendMessage(ChatColor.GOLD + "/dtn arena <name> setnexus <red/blue>");
         player.sendMessage(ChatColor.GOLD + "/dtn arena <name> setcorner");
         player.sendMessage(ChatColor.GOLD + "/dtn arena <name> setspawn <red/blue>");
-    }
-
-    private void sendRotationSuggestions(Player player) {
-        player.sendMessage(ChatColor.GOLD + "/dtn rotation");
-        player.sendMessage(ChatColor.GOLD + "/dtn rotation next");
-        player.sendMessage(ChatColor.GOLD + "/dtn rotation set <arena>");
     }
 }
