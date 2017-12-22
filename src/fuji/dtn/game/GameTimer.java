@@ -169,7 +169,6 @@ public class GameTimer {
             meta.setPower(2);
             firework.setFireworkMeta(meta);
             for (int i = 0; i < 5; i++) {
-                //Entity tntPrimedBlue = Bukkit.getWorld(blueLoc.getWorld().toString()).spawnEntity(new Location(blueLoc.getWorld(), blueLoc.getBlockX(), blueLoc.getBlockY() + 20, blueLoc.getBlockZ()), TNTPrimed.class);
                 TNTPrimed tnt = blueLoc.getWorld().spawn(blueLoc.add(0, 20, 0), TNTPrimed.class);
                 tnt.setGlowing(true);
             }

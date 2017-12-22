@@ -1,5 +1,6 @@
 package fuji.dtn.teams;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -29,11 +30,17 @@ public class Team {
     }
 
     public void addPlayer(Player player) {
-        players.add(player.getUniqueId());
+        if (!players.contains
+                (player.
+                        getUniqueId())) {
+            players.add(player.getUniqueId());
+            player.sendMessage(ChatColor.GOLD + "You joined the " + color + "" + ChatColor.BOLD + name.toUpperCase() + " TEAM" + ChatColor.GOLD + ".");
+        }
     }
 
     public void addPlayerUUID(UUID uuid) {
-        players.add(uuid);
+        Player player = Bukkit.getPlayer(uuid);
+        addPlayer(player);
     }
 
     @Deprecated

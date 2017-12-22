@@ -38,6 +38,19 @@ public class Teams {
         return null;
     }
 
+    public static void findOpenTeam(Player player) {
+        Team red = Teams.getTeamByName("red");
+        Team blue = Teams.getTeamByName("blue");
+
+        if (red.getPlayers().size() > blue.getPlayers().size()) {
+            blue.addPlayer(player);
+        } else if (blue.getPlayers().size() > red.getPlayers().size()) {
+            red.addPlayer(player);
+        } else if (red.getPlayers().size() == blue.getPlayers().size()) {
+            red.addPlayer(player);
+        }
+    }
+
     static int count = 0;
 
     public static void balance(ArrayList<UUID> players) {
@@ -48,23 +61,23 @@ public class Teams {
 
 
         for (int i = 0; i < pcount; i++) {
-
-            if (count == 0) {
-                count++;
-                red.addPlayerUUID(players.get(i));
-                Player player = Bukkit.getPlayer(players.get(i));
-                if (player.isOnline()) {
-                    player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "You joined " + red.getName().toUpperCase() + " Team.");
-                }
-            } else if (count == 1) {
-                count = 0;
-                blue.addPlayerUUID(players.get(i));
-                Player player = Bukkit.getPlayer(players.get(i));
-                if (player.isOnline()) {
-                    player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "You joined " + blue.getName().toUpperCase() + " Team.");
+            if (Teams.getTeamFromPlayer(Bukkit.getPlayer(players.get(i))) != null) {
+                if (count == 0) {
+                    count++;
+                    red.addPlayerUUID(players.get(i));
+                    Player player = Bukkit.getPlayer(players.get(i));
+                    if (player.isOnline()) {
+                        player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "You joined " + red.getName().toUpperCase() + " Team.");
+                    }
+                } else if (count == 1) {
+                    count = 0;
+                    blue.addPlayerUUID(players.get(i));
+                    Player player = Bukkit.getPlayer(players.get(i));
+                    if (player.isOnline()) {
+                        player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "You joined " + blue.getName().toUpperCase() + " Team.");
+                    }
                 }
             }
-
 
         }
 

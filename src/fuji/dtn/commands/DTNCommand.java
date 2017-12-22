@@ -125,7 +125,7 @@ public class DTNCommand implements CommandExecutor {
                                     }
                                 }
                                 Game.init(Rotation.getCurrentArena(), Players.getPlayers());
-                                Game.beginGame();
+                                Game.beginGame(10);
                                 player.sendMessage(ChatColor.GOLD + "Game has been started with " + ChatColor.RED + Players.getPlayers().size() + " players" + ChatColor.GOLD + " playing " + ChatColor.RED + Rotation.getCurrentArena().getName() + " by " + Rotation.getCurrentArena().getCreator());
                             }
                         } else if (args[1].equalsIgnoreCase("stop")) {

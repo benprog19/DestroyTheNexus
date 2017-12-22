@@ -25,8 +25,8 @@ public class Players {
     public static void addPlayer(Player player) {
         if (!isPlayer(player)) {
             players.add(player.getUniqueId());
+            player.sendMessage(ChatColor.GOLD + "You have been added in as a " + ChatColor.GREEN + "" + ChatColor.BOLD + "PLAYER" + ChatColor.GOLD + ".");
         }
-
     }
 
     public static void removePlayer(Player player) {
@@ -59,8 +59,12 @@ public class Players {
                     } else if (blue.hasPlayer(player)) {
                         player.teleport(new Location(arena.getBlueLocation().getWorld(), arena.getBlueLocation().getX(), arena.getBlueLocation().getY(), arena.getBlueLocation().getZ(), arena.getBlueLocation().getYaw(), arena.getBlueLocation().getPitch()));
                     } else {
-                        Spectators.addPlayer(player);
-                        player.sendMessage(ChatColor.RED + "You have been added as a " + ChatColor.YELLOW + "" + ChatColor.BOLD + "Spectator " + ChatColor.RED + "because you did not choose a team.");
+                        Teams.findOpenTeam(player);
+                        if (red.hasPlayer(player)) {
+                            player.teleport(arena.getRedLocation());
+                        } else if (blue.hasPlayer(player)) {
+                            player.teleport(arena.getBlueLocation());
+                        }
                     }
                 }
             } else {
@@ -69,8 +73,12 @@ public class Players {
                 } else if (blue.hasPlayer(singlePlayer)) {
                     singlePlayer.teleport(new Location(arena.getBlueLocation().getWorld(), arena.getBlueLocation().getX(), arena.getBlueLocation().getY(), arena.getBlueLocation().getZ(), arena.getBlueLocation().getYaw(), arena.getBlueLocation().getPitch()));
                 } else {
-                    Spectators.addPlayer(singlePlayer);
-                    singlePlayer.sendMessage(ChatColor.RED + "You have been added as a " + ChatColor.YELLOW + "" + ChatColor.BOLD + "Spectator " + ChatColor.RED + "because you did not choose a team.");
+                    Teams.findOpenTeam(singlePlayer);
+                    if (red.hasPlayer(singlePlayer)) {
+                        singlePlayer.teleport(arena.getRedLocation());
+                    } else if (blue.hasPlayer(singlePlayer)) {
+                        singlePlayer.teleport(arena.getBlueLocation());
+                    }
                 }
 
             }

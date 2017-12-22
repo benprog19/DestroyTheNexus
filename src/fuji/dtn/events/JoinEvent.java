@@ -1,6 +1,10 @@
 package fuji.dtn.events;
 
-import fuji.dtn.game.*;
+import fuji.dtn.game.Game;
+import fuji.dtn.game.GameState;
+import fuji.dtn.game.Lobby;
+import fuji.dtn.game.Players;
+import fuji.dtn.kits.Kits;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
@@ -11,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 /**
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -24,9 +27,8 @@ public class JoinEvent implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
-        player.removePotionEffect(PotionEffectType.INVISIBILITY);
         for (Player pls : Bukkit.getOnlinePlayers()) {
-            player.showPlayer(pls);
+            pls.showPlayer(player);
         }
 
         for (PotionEffect effect : player.getActivePotionEffects()) {
@@ -44,27 +46,32 @@ public class JoinEvent implements Listener {
             if (GameState.getGameState().equals(GameState.WAITING)) {
                 Game.tryStart();
             } else if (GameState.getGameState().equals(GameState.STARTING)) {
-                Team red = Teams.getTeamByName("red");
-                Team blue = Teams.getTeamByName("blue");
-
-                if (red.getPlayers().size() > blue.getPlayers().size()) {
-                    blue.addPlayer(player);
-                    player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "You have joined the BLUE Team.");
-                } else if (blue.getPlayers().size() > red.getPlayers().size()) {
-                    red.addPlayer(player);
-                    player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "You have joined the RED Team.");
-                } else if (red.getPlayers().size() == blue.getPlayers().size()) {
-                    red.addPlayer(player);
-                    player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "You have joined the RED Team.");
-                }
+                Teams.findOpenTeam(player);
             }
 
         } else {
-            player.sendMessage(ChatColor.GOLD + "You have joined the " + ChatColor.YELLOW + "" + ChatColor.BOLD + "SPECTATORS.");
-            Spectators.addPlayer(player);
-            player.teleport(Rotation.getCurrentArena().getRedLocation());
+            Team red = Teams.getTeamByName("red");
+            Team blue = Teams.getTeamByName("blue");
+
+            Teams.findOpenTeam(player);
+
+            for (PotionEffect effect : player.getActivePotionEffects()) {
+                player.removePotionEffect(effect.getType());
+            }
+
+            for (Player pls : Bukkit.getOnlinePlayers()) {
+                pls.showPlayer(player);
+            }
+            Kits.getDefaultKit().addPlayer(player);
+            if (Teams.getTeamFromPlayer(player).equals(red)) {
+                player.teleport(Rotation.getCurrentArena().getRedLocation());
+            } else if (Teams.getTeamFromPlayer(player).equals(blue)) {
+                player.teleport(Rotation.getCurrentArena().getBlueLocation());
+            }
         }
     }
+
+
 
 
 }

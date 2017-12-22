@@ -29,10 +29,10 @@ public class Game {
         GameState.setGameState(GameState.WAITING);
     }
 
-    public static void beginGame() {
+    public static void beginGame(int time) {
         ResetArena.resetArena(arena);
         GameState.setGameState(GameState.STARTING);
-        GameTimer timer = new GameTimer(61, players);
+        GameTimer timer = new GameTimer(time + 1, players);
         timer.startCountdown();
     }
 
@@ -46,10 +46,14 @@ public class Game {
         }
 
         if (Rotation.getCurrentArena() != null) {
+            Bukkit.broadcastMessage(ChatColor.GOLD + "" + ChatColor.STRIKETHROUGH + "                                       ");
+            Bukkit.broadcastMessage(" ");
             Bukkit.broadcastMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "The Winner of " + ChatColor.WHITE
                     + "" + ChatColor.BOLD + Rotation.getCurrentArena().getName() + ChatColor.GOLD + " "
                     + ChatColor.BOLD + "is " + winner.getColor() + "" + ChatColor.BOLD + "TEAM "
                     + winner.getName().toUpperCase() + ChatColor.GOLD + "" + ChatColor.BOLD + "!");
+            Bukkit.broadcastMessage(" ");
+            Bukkit.broadcastMessage(ChatColor.GOLD + "" + ChatColor.STRIKETHROUGH + "                                       ");
         }
 
         GameState.setGameState(GameState.ENDING);
@@ -91,7 +95,7 @@ public class Game {
                 try {
                     new Rotation();
                     Game.init(Rotation.getCurrentArena(), Players.getPlayers());
-                    Game.beginGame();
+                    Game.beginGame(60);
                 } catch (IllegalStateException ex) {
                     Bukkit.broadcastMessage(ChatColor.RED + "There are no available games to play.");
                 }

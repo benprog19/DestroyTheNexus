@@ -1,5 +1,6 @@
 package fuji.dtn.events;
 
+import fuji.dtn.game.GameState;
 import fuji.dtn.kits.Kits;
 import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
@@ -22,10 +23,14 @@ public class ChatEvent implements Listener {
         Team team = Teams.getTeamFromPlayer(player);
         String kitname = Kits.getKitNameByPlayer(player);
 
-        if (team != null) {
-            e.setFormat(ChatColor.DARK_GRAY + "[" + team.getColor() + team.getName() + ChatColor.DARK_GRAY + "] (" + team.getColor() + kitname + ChatColor.DARK_GRAY + ") " + team.getColor() + player.getName() + ChatColor.DARK_GRAY + ": " + team.getColor() + e.getMessage());
+        if (GameState.getGameState().equals(GameState.INGAME)) {
+            if (team != null) {
+                e.setFormat(ChatColor.DARK_GRAY + "[" + team.getColor() + team.getName() + ChatColor.DARK_GRAY + "] (" + team.getColor() + kitname + ChatColor.DARK_GRAY + ") " + team.getColor() + player.getName() + ChatColor.DARK_GRAY + ": " + team.getColor() + e.getMessage());
+            } else {
+                e.setFormat(ChatColor.DARK_GRAY + "(" + ChatColor.GREEN + kitname + ChatColor.DARK_GRAY + ") " + ChatColor.GREEN + player.getName() + ChatColor.DARK_GRAY + ": " + ChatColor.WHITE + e.getMessage());
+            }
         } else {
-            e.setFormat(ChatColor.DARK_GRAY + "(" + ChatColor.GREEN + kitname + ChatColor.DARK_GRAY + ") " + ChatColor.GREEN + player.getName() + ChatColor.DARK_GRAY + ": " + ChatColor.WHITE + e.getMessage());
+            e.setFormat(ChatColor.GREEN + player.getName() + ": " + ChatColor.WHITE + e.getMessage());
         }
     }
 
