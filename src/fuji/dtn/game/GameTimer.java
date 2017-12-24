@@ -9,7 +9,10 @@ import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -87,18 +90,13 @@ public class GameTimer {
                                 player.setGameMode(GameMode.SURVIVAL);
                                 player.getWorld().strikeLightningEffect(Rotation.getCurrentArena().getRedLocation());
                                 player.getWorld().strikeLightningEffect(Rotation.getCurrentArena().getBlueLocation());
+
                                 Kit kit = Kits.getKitByPlayer(player);
-
-                                if (kit != null) {
-                                    kit.setInventory(player);
-                                    if (kit.getPotionEffect() != null) {
-                                        player.addPotionEffect(PotionEffectType.getByName(kit.getPotionEffect().getType().toString()).createEffect(kit.getPotionEffect().getDuration(), kit.getPotionEffect().getAmplifier()));
-                                    }
-                                } else {
-                                    Kits.getDefaultKit().addPlayer(player);
-                                    Kits.getDefaultKit().setInventory(player);
+                                if (kit == null) {
+                                    kit = Kits.getDefaultKit();
+                                    Kits.addPlayerToKit(player, kit);
                                 }
-
+                                kit.setInventory(player);
                             }
                         }
                         cancel();

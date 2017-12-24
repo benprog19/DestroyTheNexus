@@ -4,6 +4,7 @@ import fuji.dtn.game.Game;
 import fuji.dtn.game.GameState;
 import fuji.dtn.game.Lobby;
 import fuji.dtn.game.Players;
+import fuji.dtn.kits.Kit;
 import fuji.dtn.kits.Kits;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Team;
@@ -65,8 +66,10 @@ public class JoinEvent implements Listener {
             for (Player pls : Bukkit.getOnlinePlayers()) {
                 pls.showPlayer(player);
             }
-            Kits.getDefaultKit().addPlayer(player);
-            Kits.getDefaultKit().setInventory(player);
+
+            Kit kit = Kits.getDefaultKit();
+            Kits.addPlayerToKit(player, kit);
+            kit.setInventory(player);
             if (Teams.getTeamFromPlayer(player).equals(red)) {
                 player.teleport(Rotation.getCurrentArena().getRedLocation());
             } else if (Teams.getTeamFromPlayer(player).equals(blue)) {

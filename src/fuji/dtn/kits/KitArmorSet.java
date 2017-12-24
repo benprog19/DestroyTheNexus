@@ -47,7 +47,14 @@ public class KitArmorSet {
         }
 
         for (Map.Entry<String, ItemStack> entry : validArmorType.entrySet()) {
-            if (Main.kitStorage.get().getString("Kits." + kitName + ".Inventory." + entry.getKey() + ".armorType").equalsIgnoreCase("helmet")) {
+            if (Main.
+                    kitStorage
+                    .get()
+                    .getString("Kits." +
+                            kitName + ".Inventory." +
+                            entry.getKey() +
+                            ".armorType")
+                    .equalsIgnoreCase("helmet")) {
                 helmet = entry.getValue();
 
             } else if (Main.kitStorage.get().getString("Kits." + kitName + ".Inventory." + entry.getKey() + ".armorType").equalsIgnoreCase("chestplate")) {

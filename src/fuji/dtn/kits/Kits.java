@@ -114,21 +114,26 @@ public class Kits {
     }
 
     public static Kit getKitByPlayer(Player player) {
-        for (int i = 0; i < getAllRegisteredKits().size(); i++) {
-            if (getAllRegisteredKits().get(i).hasPlayer(player)) {
-                return getAllRegisteredKits().get(i);
-            }
-        }
-        return null;
+        return playerToKit.get(player.getUniqueId());
     }
 
     public static String getKitNameByPlayer(Player player) {
-        for (int i = 0; i < getAllRegisteredKits().size(); i++) {
-            if (getAllRegisteredKits().get(i).hasPlayer(player)) {
-                return getAllRegisteredKits().get(i).getName();
-            }
+        if (getKitByPlayer(player) != null) {
+            return getKitByPlayer(player).getName();
         }
+
         return "Unknown";
+    }
+
+    public static void addPlayerToKit(Player player, Kit kit) {
+        if (kit != null) {
+            playerToKit.put(player.getUniqueId(), kit);
+            player.sendMessage(ChatColor.GOLD + "You have selected the " + ChatColor.RED + kit.getName() + ChatColor.GOLD + " kit.");
+        }
+    }
+
+    public static void removePlayerFromKit(Player player) {
+        playerToKit.remove(player.getUniqueId());
     }
 
     public static ItemStack createItemStack(ConfigurationSection section) {

@@ -2,8 +2,6 @@ package fuji.dtn.kits;
 
 import fuji.dtn.main.Main;
 import fuji.dtn.teams.Teams;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,9 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -28,12 +24,13 @@ public class Kit {
     PotionEffect potionEffect;
     boolean zdefault;
 
-    ArrayList<UUID> players = new ArrayList<>();
 
     public Kit(String name, int price, PotionEffect potionEffect, boolean zdefault) {
         this.name = name;
         this.price = price;
-        this.potionEffect = potionEffect;
+        if (potionEffect != null) {
+            this.potionEffect = new PotionEffect(potionEffect.getType(), 1000000, potionEffect.getAmplifier());
+        }
         this.zdefault = zdefault;
         Kits.registerKit(this);
     }
@@ -51,35 +48,7 @@ public class Kit {
     }
 
     public void setPotionEffect(PotionEffect newEffect) {
-        this.potionEffect = newEffect;
-    }
-
-    public boolean hasPlayer(Player player) {
-        if (players.contains(player.getUniqueId())) {
-            return true;
-        }
-        return false;
-    }
-
-    public void addPlayer(Player player) {
-        players.add(player.getUniqueId());
-        player.sendMessage(ChatColor.GOLD + "You have selected the " + ChatColor.RED + name + ChatColor.GOLD + " kit.");
-    }
-
-    public Player getPlayer(Player player) {
-        if (hasPlayer(player)) {
-            for (int i = 0; i < players.size(); i++) {
-                Player player1 = Bukkit.getPlayer(players.get(i));
-                if (player1.getUniqueId().equals(player.getUniqueId())) {
-                    return player1;
-                }
-            }
-        }
-        return null;
-    }
-
-    public void removePlayer(Player player) {
-        players.remove(player.getUniqueId());
+        this.potionEffect = new PotionEffect(newEffect.getType(), 1000000, newEffect.getAmplifier());
     }
 
     public boolean isDefault() {
@@ -160,7 +129,7 @@ public class Kit {
     public void setPotionEffect(Player player) {
         player.getActivePotionEffects().clear();
         if (potionEffect != null) {
-            player.addPotionEffect(new PotionEffect(potionEffect.getType(), 1000000, potionEffect.getAmplifier()));
+            player.addPotionEffect(potionEffect);
         }
     }
 
