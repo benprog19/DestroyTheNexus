@@ -13,9 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -28,6 +26,7 @@ public class Kits {
 
     static ArrayList<Kit> kits = new ArrayList<>();
 
+    static ConcurrentHashMap<UUID, Kit> playerToKit = new ConcurrentHashMap<>();
     static ConcurrentHashMap<String, ItemStack> itemIDs = new ConcurrentHashMap<>();
     static ConcurrentHashMap<Integer, ItemStack> item = new ConcurrentHashMap<>();
     static ConcurrentHashMap<Kit, PotionEffect> potionEffects = new ConcurrentHashMap<>();
@@ -50,28 +49,26 @@ public class Kits {
         console.sendMessage(ChatColor.GREEN + "Loading kits from file...");
 
         while (iterator.hasNext()) {
+            String kitname = iterator.next();
+            int price = config.getInt("Kits." + kitname + ".price");
+            PotionEffect potionEffect;
             try {
-                String kitname = iterator.next();
-                int price = config.getInt("Kits." + kitname + ".price");
-                PotionEffect potionEffect;
-                if (!config.getString("Kits." + kitname + ".potionEffect").equalsIgnoreCase("clear")) {
-                    potionEffect = PotionEffectType.getByName(config.getString("Kits." + kitname + ".potionEffect")).createEffect(10000000, config.getInt("Kits." + kitname + ".potion.amp"));
-
+                if (!config.getString("Kits." + kitname + ".potionEffect").equalsIgnoreCase("clear") || config.get("Kits." + kitname + ".potionEffect") != null) {
+                    potionEffect = PotionEffectType.getByName(config.getString("Kits." + kitname + ".potionEffect")).createEffect(10000000, calculatePotionAmp(config, kitname));
                     if (kitname != null) {
-                        Kit kit = new Kit(kitname, price, potionEffect);
+                        Kit kit = new Kit(kitname, price, potionEffect, config.getBoolean("Kits." + kitname + ".default"));
                         potionEffects.put(kit, potionEffect);
                     }
                 } else {
                     if (kitname != null) {
-                        Kit kit = new Kit(kitname, price, null);
+                        Kit kit = new Kit(kitname, price, null, config.getBoolean("Kits." + kitname + ".default"));
                         potionEffects.put(kit, null);
                     }
                 }
-
-
-            } catch (Exception ex) {
-                console.sendMessage(ChatColor.RED + "Error while loading a kit. Please check to config to make sure it fits the criteria (Criteria: KitName and PotionEffect)");
+            } catch (NullPointerException ex){
+                new Kit(kitname, price, null, config.getBoolean("Kits." + kitname + ".default"));
             }
+
 
         }
 
@@ -148,7 +145,23 @@ public class Kits {
     }
 
     public static Kit getDefaultKit() {
-        return null;
+        for (int i = 0; i < getAllRegisteredKits().size(); i++) {
+            if (getAllRegisteredKits().get(i).isDefault()) {
+                return getAllRegisteredKits().get(i);
+            }
+        }
+
+        Random random = new Random();
+        int rand = random.nextInt(getAllRegisteredKits().size());
+        return getAllRegisteredKits().get(rand);
+    }
+
+    private int calculatePotionAmp(FileConfiguration config, String kitname) {
+        if (config.get("Kits." + kitname + ".potionEffect.amp") != null) {
+            return config.getInt("Kits." + kitname + ".potionEffect.amp");
+        } else {
+            return 0;
+        }
     }
 
 }

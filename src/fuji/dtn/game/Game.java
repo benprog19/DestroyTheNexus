@@ -7,6 +7,8 @@ import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -43,6 +45,9 @@ public class Game {
                 players.add(pls.getUniqueId());
                 Players.addPlayer(pls);
             }
+            pls.setGameMode(GameMode.SURVIVAL);
+            pls.setAllowFlight(true);
+            pls.getInventory().clear();
         }
 
         if (Rotation.getCurrentArena() != null) {
@@ -66,8 +71,18 @@ public class Game {
 
         if (winner.equals(red)) {
             loser = blue;
+            Location blueloc = Rotation.getCurrentArena().getBlueLocation();
+            for (int i = 0; i < 20; i++) {
+                blueloc.getWorld().strikeLightning(blueloc);
+            }
+            blueloc.getWorld().createExplosion(blueloc.getBlockX(), blueloc.getBlockY(), blueloc.getBlockZ(), 10.0F);
         } else if (winner.equals(blue)) {
             loser = red;
+            Location redLoc = Rotation.getCurrentArena().getRedLocation();
+            for (int i = 0; i < 20; i++) {
+                redLoc.getWorld().strikeLightning(redLoc);
+            }
+            redLoc.getWorld().createExplosion(redLoc.getBlockX(), redLoc.getBlockY(), redLoc.getBlockZ(), 10.0F);
         } else {
             loser = null;
             Bukkit.broadcastMessage(ChatColor.RED + "Error while finding loser. Restarting...");

@@ -26,13 +26,15 @@ public class Kit {
     String name;
     int price;
     PotionEffect potionEffect;
+    boolean zdefault;
 
     ArrayList<UUID> players = new ArrayList<>();
 
-    public Kit(String name, int price, PotionEffect potionEffect) {
+    public Kit(String name, int price, PotionEffect potionEffect, boolean zdefault) {
         this.name = name;
         this.price = price;
         this.potionEffect = potionEffect;
+        this.zdefault = zdefault;
         Kits.registerKit(this);
     }
 
@@ -78,6 +80,10 @@ public class Kit {
 
     public void removePlayer(Player player) {
         players.remove(player.getUniqueId());
+    }
+
+    public boolean isDefault() {
+        return zdefault;
     }
 
     public void setInventory(Player player) {
@@ -143,6 +149,8 @@ public class Kit {
                 ItemStack itemStack = entry.getValue();
                 System.out.print("Slot DisplayName: " + itemStack.getItemMeta().getDisplayName());
                 player.getInventory().setItem(entry.getKey(), itemStack);
+
+                //TODO: Set armor?
             }
             player.updateInventory();
         }

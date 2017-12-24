@@ -10,6 +10,7 @@ import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,6 +28,7 @@ public class JoinEvent implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
+        player.setGameMode(GameMode.SURVIVAL);
         for (Player pls : Bukkit.getOnlinePlayers()) {
             pls.showPlayer(player);
         }
@@ -36,6 +38,7 @@ public class JoinEvent implements Listener {
         }
 
         if (GameState.getGameState() == GameState.WAITING || GameState.getGameState() == GameState.STARTING) {
+
             Players.addPlayer(player);
             if (Lobby.getLobbyLoc() != null) {
                 player.teleport(Lobby.getLobbyLoc());
@@ -63,6 +66,7 @@ public class JoinEvent implements Listener {
                 pls.showPlayer(player);
             }
             Kits.getDefaultKit().addPlayer(player);
+            Kits.getDefaultKit().setInventory(player);
             if (Teams.getTeamFromPlayer(player).equals(red)) {
                 player.teleport(Rotation.getCurrentArena().getRedLocation());
             } else if (Teams.getTeamFromPlayer(player).equals(blue)) {
@@ -71,7 +75,9 @@ public class JoinEvent implements Listener {
         }
     }
 
-
+    private void updateScoreboard(Player player, int delay) {
+        //TODO: Move to ScoreboardSidebar.java & add auto update for global server (use onEnable method).
+    }
 
 
 }

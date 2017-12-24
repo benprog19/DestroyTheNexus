@@ -25,7 +25,7 @@ public class PvPEvent implements Listener {
     public void onPvP(EntityDamageByEntityEvent e) {
         final Entity p = e.getEntity();
         final Entity d = e.getDamager();
-
+        System.out.print("uh");
         if (p instanceof Player && d instanceof Player) {
             final Player player = (Player) e.getEntity();
             final Player damager = (Player) e.getDamager();

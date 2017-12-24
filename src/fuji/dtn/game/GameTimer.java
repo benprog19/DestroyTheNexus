@@ -95,12 +95,8 @@ public class GameTimer {
                                         player.addPotionEffect(PotionEffectType.getByName(kit.getPotionEffect().getType().toString()).createEffect(kit.getPotionEffect().getDuration(), kit.getPotionEffect().getAmplifier()));
                                     }
                                 } else {
-                                    Kit adefault = Kits.getKitByName("Standard");
-                                    if (adefault != null) {
-                                        adefault.addPlayer(player);
-                                        adefault.setInventory(player);
-                                    }
-
+                                    Kits.getDefaultKit().addPlayer(player);
+                                    Kits.getDefaultKit().setInventory(player);
                                 }
 
                             }

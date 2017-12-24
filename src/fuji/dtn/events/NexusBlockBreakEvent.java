@@ -1,13 +1,13 @@
 package fuji.dtn.events;
 
-import java.util.Iterator;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import fuji.dtn.game.Game;
+import fuji.dtn.game.GameState;
+import fuji.dtn.game.Players;
+import fuji.dtn.main.Main;
+import fuji.dtn.rotation.Rotation;
+import fuji.dtn.teams.Team;
+import fuji.dtn.teams.Teams;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
@@ -17,13 +17,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import fuji.dtn.game.Game;
-import fuji.dtn.game.GameState;
-import fuji.dtn.game.Players;
-import fuji.dtn.main.Main;
-import fuji.dtn.rotation.Rotation;
-import fuji.dtn.teams.Team;
-import fuji.dtn.teams.Teams;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -75,7 +70,6 @@ public class NexusBlockBreakEvent implements Listener {
                                 Bukkit.broadcastMessage(ChatColor.GOLD + "Team " + ChatColor.RED + red.getName() + "'s Nexus Shield At " + ChatColor.GOLD + "" + ChatColor.BOLD + (100 - dmg) + "% Health");
                                 e.setDropItems(false);
                                 if (dmg == 100) {
-                                    Bukkit.broadcastMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "BLUE TEAM WINS!");
                                     blocksBlue = 0;
                                     blocksRed = 0;
                                     Game.endGame(blue);
@@ -94,7 +88,6 @@ public class NexusBlockBreakEvent implements Listener {
                                 Bukkit.broadcastMessage(ChatColor.GOLD + "Team " + ChatColor.BLUE + blue.getName() + "'s Nexus Shield At " + ChatColor.GOLD + "" + ChatColor.BOLD + (100 - dmg) + "% Health");
                                 e.setDropItems(false);
                                 if (dmg == 100) {
-                                    Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "RED TEAM WINS!");
                                     blocksBlue = 0;
                                     blocksRed = 0;
                                     Game.endGame(red);
@@ -107,6 +100,10 @@ public class NexusBlockBreakEvent implements Listener {
                         e.setCancelled(true);
                     }
                 }
+            }
+        } else {
+            if (!e.getPlayer().isOp()) {
+                e.setCancelled(true);
             }
         }
     }

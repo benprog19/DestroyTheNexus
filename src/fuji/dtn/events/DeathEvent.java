@@ -9,7 +9,7 @@ import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Effect;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -70,7 +70,7 @@ public class DeathEvent implements Listener {
         }
         player.setFoodLevel(20);
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100000, 5));
-        player.getWorld().playEffect(player.getLocation(), Effect.EXPLOSION_LARGE, 1);
+        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, player.getLocation(), 1);
         player.sendMessage(ChatColor.GOLD + "You will be revived in " + ChatColor.RED + "10 seconds.");
         player.setAllowFlight(true);
         afterdeath(player, killer);
@@ -99,7 +99,7 @@ public class DeathEvent implements Listener {
                 player.setAllowFlight(false);
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 255));
-                player.getWorld().playEffect(player.getLocation(), Effect.EXPLOSION_LARGE, 1);
+                player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, player.getLocation(), 1);
                 player.sendMessage(ChatColor.GREEN + "You have been revived!");
 
                 if (deadPlayers.contains(player.getUniqueId())) {
