@@ -180,14 +180,6 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        ArrayList<Arena> arenas = Arenas.getRegisteredArenas();
-        for (int i = 0; i < arenas.size(); i++) {
-            if (arenas.get(i).isPlayable()) {
-                ResetArena.resetArena(arenas.get(i));
-                Bukkit.broadcastMessage(ChatColor.GOLD + "# Map Resetting # " + ChatColor.BLUE + "Resetting " + ChatColor.GREEN + arenas.get(i).getName() + ChatColor.BLUE + " from last backup.");
-                ResetArena.saveArena(arenas.get(i));
-                Bukkit.broadcastMessage(ChatColor.GOLD + "# Map Saving # " + ChatColor.BLUE + "Saving " + ChatColor.GREEN + arenas.get(i).getName() + ChatColor.BLUE + ".");
-            }
-        }
+
     }
 }

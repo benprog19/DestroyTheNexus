@@ -87,6 +87,9 @@ public class DeathEvent implements Listener {
             @SuppressWarnings("deprecation")
 			@Override
             public void run() {
+                if (deadPlayers.contains(player.getUniqueId())) {
+                    deadPlayers.remove(player.getUniqueId());
+                }
                 Players.teleportPlayerToTeams(player, false);
                 player.setHealth(20);
                 for (int pls = 0; pls < Players.getPlayers().size(); pls++) {
@@ -106,11 +109,6 @@ public class DeathEvent implements Listener {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 255));
                 player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, player.getLocation(), 1);
                 player.sendMessage(ChatColor.GREEN + "You have been revived!");
-
-                if (deadPlayers.contains(player.getUniqueId())) {
-                    deadPlayers.remove(player.getUniqueId());
-                }
-
                 Kit kit = Kits.getKitByPlayer(player);
                 if (kit != null) {
                     Kits.setInventory(player, kit);

@@ -73,7 +73,7 @@ public class GameTimer {
 
                     if (count == 0) {
                         Players.fixPlayerSetup(players);
-                        ResetArena.resetArena(Rotation.getCurrentArena());
+                        ResetArena.resetArena(Rotation.getCurrentArena(), true);
                         Players.teleportPlayerToTeams(null, true);
                         GameState.setGameState(GameState.INGAME);
                         for (int i = 0; i < players.size(); i++) {
@@ -133,7 +133,7 @@ public class GameTimer {
                     }
                 } else if (count == 0) {
                     cancel();
-                    ResetArena.resetArena(Rotation.getCurrentArena());
+                    ResetArena.resetArena(Rotation.getCurrentArena(), true);
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         GameState.setGameState(GameState.WAITING);
                         player.sendMessage(ChatColor.GREEN + "Teleporting to lobby...");

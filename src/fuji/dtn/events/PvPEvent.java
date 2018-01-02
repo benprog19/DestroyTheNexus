@@ -10,6 +10,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.material.MaterialData;
@@ -21,7 +22,7 @@ import org.bukkit.material.MaterialData;
  */
 public class PvPEvent implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPvP(EntityDamageByEntityEvent e) {
         final Entity p = e.getEntity();
         final Entity d = e.getDamager();
@@ -30,7 +31,7 @@ public class PvPEvent implements Listener {
             final Player damager = (Player) e.getDamager();
             if (GameState.getGameState().equals(GameState.INGAME)) {
                 if (Players.isPlayer(player) && Players.isPlayer(damager)) {
-                    if (!DeathEvent.isDead(player)) {
+                    if (!DeathEvent.isDead(damager)) {
                         if (Teams.getTeamFromPlayer(player) != Teams.getTeamFromPlayer(damager)) {
                             for (int i = 0; i < 20; i++) {
                                 player.spawnParticle(

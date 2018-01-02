@@ -29,7 +29,6 @@ public class Game {
     }
 
     public static void beginGame(int time) {
-        ResetArena.resetArena(arena);
         GameState.setGameState(GameState.STARTING);
         GameTimer timer = new GameTimer(time + 1, players);
         timer.startCountdown();

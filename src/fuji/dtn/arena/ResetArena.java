@@ -20,9 +20,11 @@ import java.lang.reflect.Field;
 public class ResetArena implements Listener {
 
 
-    public static void saveArena(Arena arena) {
-        for (Player pls : Bukkit.getOnlinePlayers()) {
-            pls.teleport(new Location(Bukkit.getWorlds().get(1), 0, 100, 0));
+    public static void saveArena(Arena arena, boolean teleport) {
+        if (teleport) {
+            for (Player pls : Bukkit.getOnlinePlayers()) {
+                pls.teleport(new Location(Bukkit.getWorlds().get(1), 0, 100, 0));
+            }
         }
 
         Chunk chunkCorner1 = arena.getArenaCorner1().getChunk();
@@ -39,17 +41,21 @@ public class ResetArena implements Listener {
                 chunk.load();
             }
         }
-        for (Player pls : Bukkit.getOnlinePlayers()) {
-            if (pls != null) {
-                pls.teleport(Lobby.getLobbyLoc());
+        if (teleport) {
+            for (Player pls : Bukkit.getOnlinePlayers()) {
+                if (pls != null) {
+                    pls.teleport(Lobby.getLobbyLoc());
+                }
             }
         }
     }
 
-    public static void resetArena(Arena arena) {
-        for (Player pls : Bukkit.getOnlinePlayers()) {
-            if (pls != null) {
-                pls.teleport(new Location(Bukkit.getWorlds().get(1), 0, 100, 0));
+    public static void resetArena(Arena arena, boolean teleport) {
+        if (teleport) {
+            for (Player pls : Bukkit.getOnlinePlayers()) {
+                if (pls != null) {
+                    pls.teleport(new Location(Bukkit.getWorlds().get(1), 0, 100, 0));
+                }
             }
         }
         Chunk chunkCorner1 = arena.getArenaCorner1().getChunk();
@@ -66,11 +72,18 @@ public class ResetArena implements Listener {
                 chunk.load();
             }
         }
-        for (Player pls : Bukkit.getOnlinePlayers()) {
-            if (pls != null) {
-                pls.teleport(Lobby.getLobbyLoc());
+        if (teleport) {
+            for (Player pls : Bukkit.getOnlinePlayers()) {
+                if (pls != null) {
+                    pls.teleport(Lobby.getLobbyLoc());
+                }
             }
         }
+    }
+
+    public static void resetAndSaveArena(Arena arena, boolean teleport) {
+        resetArena(arena, teleport);
+        saveArena(arena, teleport);
     }
 
     @EventHandler
