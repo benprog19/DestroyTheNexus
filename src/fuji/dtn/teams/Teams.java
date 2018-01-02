@@ -2,6 +2,7 @@ package fuji.dtn.teams;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -107,6 +108,16 @@ public class Teams {
             }
         }
         return ChatColor.GRAY;
+    }
+
+    public static Color getArmorColorFromPlayerTeam(Player player) {
+        if (getTeamFromPlayer(player).equals(getTeamByName("red"))) {
+            return Color.fromRGB(255, 0, 0);
+        } else if (getTeamFromPlayer(player).equals(getTeamByName("blue"))) {
+            return Color.fromRGB(0, 0, 255);
+        } else {
+            return Color.fromRGB(255, 255, 255);
+        }
     }
 
     public static Team getTeamFromPlayer(Player player) {

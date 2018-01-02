@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by Ben on 11/29/2017.
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
  */
+
+@Deprecated
 public class KitArmorSet {
 
     ItemStack helmet;
@@ -26,7 +28,7 @@ public class KitArmorSet {
     static ConcurrentHashMap<String, ItemStack> validArmorType = new ConcurrentHashMap<>();
 
     public KitArmorSet(String kitName) {
-
+        System.out.print("Creating Armor Set for: " + kitName);
         ConfigurationSection idsConfig = Main.kitStorage.get().getConfigurationSection("Kits." + kitName + ".Inventory");
         Set<String> ids = idsConfig.getKeys(false);
         Iterator<String> iterator = ids.iterator();
@@ -36,7 +38,7 @@ public class KitArmorSet {
 
             Set<String> idInformation = idsConfig.getConfigurationSection("." + id).getKeys(false);
             Iterator<String> iteratorInfo = idInformation.iterator();
-
+            System.out.print("-- IDInformation From Config -- : " + idInformation.size() + " : [" + idInformation.toString() + "]");
             while (iteratorInfo.hasNext()) {
                 String info = iteratorInfo.next();
                 if (info.equals("armorType")) {
@@ -96,7 +98,7 @@ public class KitArmorSet {
 
     public void listIDs() {
         for (Map.Entry<String, ItemStack> map : validArmorType.entrySet()) {
-            System.out.print("ID: " + map.getKey() + "  IS: " + map.getValue().getType().toString());
+            //System.out.print("ID: " + map.getKey() + "  IS: " + map.getValue().getType().toString());
         }
     }
 

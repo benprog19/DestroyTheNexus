@@ -28,7 +28,8 @@ public class MoveEvent implements Listener {
             if (Spectators.isSpectator(player) || DeathEvent.deadPlayers.contains(player.getUniqueId())) {
                 if (player.getLocation().getY() < 0) {
                     if (arena != null) {
-                        player.teleport(arena.getRedLocation());
+                        player.teleport(new Location(player.getWorld(), player.getLocation().getBlockX() + 0.5, player.getLocation().getBlockY() + 20, player.getLocation().getBlockZ() + 0.5));
+                        player.setAllowFlight(true);
                     } else {
                         player.teleport(new Location(player.getWorld(), player.getLocation().getBlockX() + 0.5, 64.0, player.getLocation().getBlockZ() + 0.5));
                     }
@@ -37,7 +38,8 @@ public class MoveEvent implements Listener {
                 if (player.getLocation().getY() < 0) {
                     if (arena != null) {
                         player.setHealth(0);
-                        player.teleport(arena.getRedLocation());
+                        player.teleport(new Location(player.getWorld(), player.getLocation().getBlockX() + 0.5, player.getLocation().getBlockY() + 20, player.getLocation().getBlockZ() + 0.5));
+                        player.setAllowFlight(true);
                     } else {
                         player.teleport(new Location(player.getWorld(), player.getLocation().getBlockX() + 0.5, 64.0, player.getLocation().getBlockZ() + 0.5));
                     }

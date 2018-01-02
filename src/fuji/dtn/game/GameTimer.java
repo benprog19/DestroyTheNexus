@@ -66,6 +66,7 @@ public class GameTimer {
                             Player player = Bukkit.getPlayer(players.get(i));
                             if (player.isOnline()) {
                                 player.sendMessage(ChatColor.GOLD + "Match starting in " + ChatColor.RED + count + " seconds...");
+                                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 2);
                             }
                         }
                     }
@@ -82,6 +83,7 @@ public class GameTimer {
                                 for (Player pls : Bukkit.getOnlinePlayers()) {
                                     pls.showPlayer(player);
                                 }
+                                player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1, 1);
                                 player.setHealth(20);
                                 player.setFoodLevel(20);
                                 player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 255));
@@ -94,9 +96,12 @@ public class GameTimer {
                                 Kit kit = Kits.getKitByPlayer(player);
                                 if (kit == null) {
                                     kit = Kits.getDefaultKit();
+                                    System.out.print("Default Kit: " + kit.getName());
                                     Kits.addPlayerToKit(player, kit);
                                 }
-                                kit.setInventory(player);
+                                System.out.print("Setting Kit: " + kit.getName());
+                                Kits.setInventory(player, kit);
+                                System.out.print("Has Kit: " + Kits.getKitByPlayer(player).getName());
                             }
                         }
                         cancel();
@@ -163,7 +168,7 @@ public class GameTimer {
             meta.setPower(2);
             firework.setFireworkMeta(meta);
             for (int i = 0; i < 5; i++) {
-                TNTPrimed tnt = blueLoc.getWorld().spawn(blueLoc.add(0, 20, 0), TNTPrimed.class);
+                TNTPrimed tnt = blueLoc.getWorld().spawn(blueLoc, TNTPrimed.class);
                 tnt.setGlowing(true);
             }
         } else if (winningTeam.equals(Teams.getTeamByName("blue"))) {
@@ -178,7 +183,7 @@ public class GameTimer {
             firework.setFireworkMeta(meta);
 
             for (int i = 0; i < 5; i++) {
-                TNTPrimed tnt = redLoc.getWorld().spawn(redLoc.add(0, 1, 0), TNTPrimed.class);
+                TNTPrimed tnt = redLoc.getWorld().spawn(redLoc, TNTPrimed.class);
                 tnt.setGlowing(true);
             }
         }

@@ -30,6 +30,11 @@ public class JoinEvent implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
         player.setGameMode(GameMode.SURVIVAL);
+        player.getInventory().clear();
+        player.getInventory().setHelmet(null);
+        player.getInventory().setChestplate(null);
+        player.getInventory().setLeggings(null);
+        player.getInventory().setBoots(null);
         for (Player pls : Bukkit.getOnlinePlayers()) {
             pls.showPlayer(player);
         }
@@ -69,7 +74,7 @@ public class JoinEvent implements Listener {
 
             Kit kit = Kits.getDefaultKit();
             Kits.addPlayerToKit(player, kit);
-            kit.setInventory(player);
+            Kits.setInventory(player, kit);
             if (Teams.getTeamFromPlayer(player).equals(red)) {
                 player.teleport(Rotation.getCurrentArena().getRedLocation());
             } else if (Teams.getTeamFromPlayer(player).equals(blue)) {

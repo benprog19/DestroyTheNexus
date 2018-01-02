@@ -28,9 +28,6 @@ public class Selection implements Listener {
                 if (SelectionMode.hasPlayer(e.getPlayer())) {
                     if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.STICK) {
                         e.setCancelled(true);
-
-
-
                         if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
                             Location location = new Location(e.getClickedBlock().getLocation().getWorld(), e.getClickedBlock().getLocation().getBlockX(), e.getClickedBlock().getLocation().getBlockY(), e.getClickedBlock().getLocation().getBlockZ());
                             Arena arena = Arenas.getArenaByName(SelectionMode.getArena(e.getPlayer()).getName());

@@ -5,10 +5,7 @@ import fuji.dtn.arena.ResetArena;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -75,14 +72,16 @@ public class Game {
             for (int i = 0; i < 20; i++) {
                 blueloc.getWorld().strikeLightning(blueloc);
             }
-            blueloc.getWorld().createExplosion(blueloc.getBlockX(), blueloc.getBlockY(), blueloc.getBlockZ(), 10.0F);
+            blueloc.getWorld().createExplosion(blueloc.getBlockX(), blueloc.getBlockY(), blueloc.getBlockZ(), 100.0F);
+            blueloc.getWorld().playSound(blueloc, Sound.ENTITY_ENDERDRAGON_DEATH, 100, 1);
         } else if (winner.equals(blue)) {
             loser = red;
             Location redLoc = Rotation.getCurrentArena().getRedLocation();
             for (int i = 0; i < 20; i++) {
                 redLoc.getWorld().strikeLightning(redLoc);
             }
-            redLoc.getWorld().createExplosion(redLoc.getBlockX(), redLoc.getBlockY(), redLoc.getBlockZ(), 10.0F);
+            redLoc.getWorld().createExplosion(redLoc.getBlockX(), redLoc.getBlockY(), redLoc.getBlockZ(), 100.0F);
+            redLoc.getWorld().playSound(redLoc, Sound.ENTITY_ENDERDRAGON_DEATH, 100, 1);
         } else {
             loser = null;
             Bukkit.broadcastMessage(ChatColor.RED + "Error while finding loser. Restarting...");
@@ -110,7 +109,7 @@ public class Game {
                 try {
                     new Rotation();
                     Game.init(Rotation.getCurrentArena(), Players.getPlayers());
-                    Game.beginGame(60);
+                    Game.beginGame(30);
                 } catch (IllegalStateException ex) {
                     Bukkit.broadcastMessage(ChatColor.RED + "There are no available games to play.");
                 }

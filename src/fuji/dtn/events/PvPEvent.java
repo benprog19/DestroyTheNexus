@@ -25,13 +25,12 @@ public class PvPEvent implements Listener {
     public void onPvP(EntityDamageByEntityEvent e) {
         final Entity p = e.getEntity();
         final Entity d = e.getDamager();
-        System.out.print("uh");
         if (p instanceof Player && d instanceof Player) {
             final Player player = (Player) e.getEntity();
             final Player damager = (Player) e.getDamager();
             if (GameState.getGameState().equals(GameState.INGAME)) {
                 if (Players.isPlayer(player) && Players.isPlayer(damager)) {
-                    if (!DeathEvent.deadPlayers.contains(damager.getUniqueId())) {
+                    if (!DeathEvent.isDead(player)) {
                         if (Teams.getTeamFromPlayer(player) != Teams.getTeamFromPlayer(damager)) {
                             for (int i = 0; i < 20; i++) {
                                 player.spawnParticle(
@@ -39,6 +38,7 @@ public class PvPEvent implements Listener {
                                         player.getEyeLocation(), 1, 0, 0, 0, new MaterialData(Material.REDSTONE_BLOCK));
                             }
                             player.getWorld().playSound(player.getEyeLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
+                            player.getWorld().playSound(player.getEyeLocation(), Sound.ENTITY_BLAZE_HURT, 1, 1);
 
                         } else if (Teams.getTeamFromPlayer(player) == Teams.getTeamFromPlayer(damager)) {
                             e.setCancelled(true);

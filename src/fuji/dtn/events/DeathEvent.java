@@ -10,6 +10,7 @@ import fuji.dtn.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,6 +43,8 @@ public class DeathEvent implements Listener {
                 deadPlayers.add(player.getUniqueId());
             }
 
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_BLAZE_DEATH, 1, 1);
+
             if (red != null && blue != null) {
                 e.getDrops().clear();
                 player.getInventory().clear();
@@ -70,6 +73,8 @@ public class DeathEvent implements Listener {
         }
         player.setFoodLevel(20);
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100000, 5));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 2));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 2));
         player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, player.getLocation(), 1);
         player.sendMessage(ChatColor.GOLD + "You will be revived in " + ChatColor.RED + "10 seconds.");
         player.setAllowFlight(true);
@@ -108,11 +113,15 @@ public class DeathEvent implements Listener {
 
                 Kit kit = Kits.getKitByPlayer(player);
                 if (kit != null) {
-                    kit.setInventory(player);
+                    Kits.setInventory(player, kit);
                 }
 
             }
         }.runTaskLater(JavaPlugin.getPlugin(Main.class), 200L);
+    }
+
+    public static boolean isDead(Player player) {
+        return deadPlayers.contains(player.getUniqueId());
     }
 
 }

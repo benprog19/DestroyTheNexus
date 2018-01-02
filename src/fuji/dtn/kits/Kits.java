@@ -1,8 +1,10 @@
 package fuji.dtn.kits;
 
 import fuji.dtn.main.Main;
+import fuji.dtn.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -10,6 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -167,6 +170,127 @@ public class Kits {
         } else {
             return 0;
         }
+    }
+
+    /*
+    public static void setInventory(Player player, Kit kit) {
+        player.getInventory().clear();
+        player.updateInventory();
+        String name = kit.getName();
+        System.out.print("Kit Inv: " + kit.getName());
+        ConcurrentHashMap<Integer, ItemStack> itemStackHashMap = item;
+        for (Map.Entry<Integer, ItemStack> entry : itemStackHashMap.entrySet()) {
+            if (entry.getValue().getType().equals(Material.LEATHER_HELMET) || entry.getValue().getType().equals(Material.LEATHER_CHESTPLATE)
+                    || entry.getValue().getType().equals(Material.LEATHER_LEGGINGS) || entry.getValue().getType().equals(Material.LEATHER_BOOTS)) {
+                if (Main.kitStorage.get().getBoolean("Kits." + name + ".coloredArmor")) {
+                    KitArmorSet kitArmorSet = new KitArmorSet(name);
+
+                    ItemStack itemStack;
+                    if (entry.getValue().getType().equals(Material.LEATHER_HELMET)) {
+                        //System.out.print("Helmet");
+                        itemStack = kitArmorSet.getHelmet();
+                        ItemStack itemStackEdit = setColor(itemStack, player);
+                        player.getInventory().setHelmet(itemStackEdit);
+                    } else if (entry.getValue().getType().equals(Material.LEATHER_CHESTPLATE)) {
+                        //System.out.print("Chest");
+                        itemStack = kitArmorSet.getChestplate();
+                        ItemStack itemStackEdit = setColor(itemStack, player);
+                        player.getInventory().setChestplate(itemStackEdit);
+                    } else if (entry.getValue().getType().equals(Material.LEATHER_LEGGINGS)) {
+                        //System.out.print("Legs");
+                        itemStack = kitArmorSet.getLeggings();
+                        ItemStack itemStackEdit = setColor(itemStack, player);
+                        player.getInventory().setLeggings(itemStackEdit);
+                    } else if (entry.getValue().getType().equals(Material.LEATHER_BOOTS)) {
+                        //System.out.print("Boots");
+                        itemStack = kitArmorSet.getBoots();
+                        ItemStack itemStackEdit = setColor(itemStack, player);
+                        player.getInventory().setBoots(itemStackEdit);
+                    }
+                }
+            } else {
+               // System.out.print("Slot Num: " + entry.getKey());
+                ItemStack itemStack = entry.getValue();
+              //  System.out.print("Slot DisplayName: " + itemStack.getItemMeta().getDisplayName());
+                player.getInventory().setItem(entry.getKey(), itemStack);
+            }
+            player.updateInventory();
+        }
+        kit.setPotionEffect(player);
+    }
+    */
+
+    public static void setInventory(Player player, Kit kit) {
+        player.getInventory().clear();
+        for (PotionEffect potionEffect : player.getActivePotionEffects()) {
+            if (!potionEffect.getType().equals(PotionEffectType.DAMAGE_RESISTANCE)) {
+                player.removePotionEffect(potionEffect.getType());
+            }
+        }
+        player.updateInventory();
+        String name = kit.getName();
+        System.out.print("Kit Inv: " + kit.getName());
+
+        ConfigurationSection pathInventory = Main.kitStorage.get().getConfigurationSection("Kits." + kit.getName() + ".Inventory");
+
+        Set<String> set = pathInventory.getKeys(false);
+        Iterator<String> iterator = set.iterator();
+
+        while (iterator.hasNext()) {
+            String configItemName = iterator.next();
+            ItemStack itemStack = createItemStack(pathInventory.getConfigurationSection("." + configItemName));
+            System.out.print("ItemStack for " + kit.getName() + " putting with " + player.getName() + ": ");
+            System.out.print("ConifgItemName: " + configItemName);
+            System.out.print("Material: " + itemStack.getType().toString());
+            System.out.print("DisplayName: " + itemStack.getItemMeta().getDisplayName());
+            int slot = pathInventory.getInt("." + configItemName + ".slot");
+
+
+            if (itemStack.getType().equals(Material.LEATHER_HELMET) ||
+                    itemStack.getType().equals(Material.LEATHER_CHESTPLATE) ||
+                    itemStack.getType().equals(Material.LEATHER_LEGGINGS) ||
+                    itemStack.getType().equals(Material.LEATHER_BOOTS)) {
+                LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
+                meta.setColor(Teams.getArmorColorFromPlayerTeam(player));
+                itemStack.setItemMeta(meta);
+            }
+
+            if (slot == 100) {
+                player.getInventory().setBoots(itemStack);
+            } else if (slot == 101) {
+                player.getInventory().setLeggings(itemStack);
+            } else if (slot == 102) {
+                player.getInventory().setChestplate(itemStack);
+            } else if (slot == 103) {
+                player.getInventory().setHelmet(itemStack);
+            } else {
+                player.getInventory().setItem(slot, itemStack);
+            }
+
+        }
+        kit.setPotionEffect(player);
+    }
+
+    private static ItemStack setColor(ItemStack itemStack, Player player) {
+        if (itemStack != null) {
+            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+            Color color;
+            if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("red"))) {
+                color = Color.fromRGB(255, 0, 0);
+               // System.out.print("RED");
+            } else if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("blue"))) {
+                color = Color.fromRGB(0, 0, 255);
+               // System.out.print("BLUE");
+            } else {
+                color = Color.WHITE;
+               // System.out.print("WHITE");
+            }
+
+            leatherArmorMeta.setColor(color);
+            leatherArmorMeta.setUnbreakable(true);
+            itemStack.setItemMeta(leatherArmorMeta);
+        }
+        return itemStack;
     }
 
 }

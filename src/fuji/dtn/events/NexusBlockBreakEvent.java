@@ -75,8 +75,6 @@ public class NexusBlockBreakEvent implements Listener {
                                     Game.endGame(blue);
                                 }
                             }
-                        } else {
-                            e.setCancelled(true);
                         }
                     } else if (red.hasPlayer(player)) {
                         if (e.getBlock().getData() == 11) {
@@ -93,8 +91,6 @@ public class NexusBlockBreakEvent implements Listener {
                                     Game.endGame(red);
                                 }
                             }
-                        } else {
-                            e.setCancelled(true);
                         }
                     } else {
                         e.setCancelled(true);

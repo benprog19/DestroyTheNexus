@@ -57,6 +57,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new HungerEvent(), this);
         getServer().getPluginManager().registerEvents(new DamageEvent(), this);
         getServer().getPluginManager().registerEvents(new MoveEvent(), this);
+        getServer().getPluginManager().registerEvents(new InteractEvent(), this);
 
         red = new Team("Red", ChatColor.RED, new ArrayList<>());
         blue = new Team("Blue", ChatColor.BLUE, new ArrayList<>());
