@@ -63,6 +63,7 @@ public class JoinEvent implements Listener {
             Team blue = Teams.getTeamByName("blue");
 
             Teams.findOpenTeam(player);
+            Players.addPlayer(player);
 
             for (PotionEffect effect : player.getActivePotionEffects()) {
                 player.removePotionEffect(effect.getType());

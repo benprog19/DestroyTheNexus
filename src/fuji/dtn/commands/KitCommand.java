@@ -36,6 +36,14 @@ public class KitCommand implements CommandExecutor {
                     } else {
                         player.sendMessage(ChatColor.RED + " No kits available.");
                     }
+                } else if (args[0] != null) {
+                    String kitname = args[1];
+                    Kit kit = Kits.getKitByName(kitname);
+                    if (kit != null) {
+                        Kits.addPlayerToKit(player, kit);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "That kit does not exist.");
+                    }
                 }
             } else if (args.length == 2) {
                 if (args[0].equalsIgnoreCase("select")) {

@@ -1,15 +1,16 @@
 package fuji.dtn.arena;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.bukkit.Bukkit;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-
+import fuji.dtn.game.Lobby;
 import fuji.dtn.main.Main;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -110,6 +111,37 @@ public class Arenas {
             }
         }
         return null;
+    }
+
+    public static void resetAll() {
+        Bukkit.broadcastMessage(ChatColor.RED + "Resetting all Arenas...");
+
+        Date date = new Date();
+        Timestamp timestamp = new Timestamp(date.getTime());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp.getTime());
+
+        for (Player pls : Bukkit.getOnlinePlayers()) {
+            pls.teleport(new Location(Bukkit.getWorlds().get(1), 0.5, 100.0, 0.5));
+        }
+        ArrayList<Arena> arenas = getRegisteredArenas();
+        for (int i = 0; i < arenas.size(); i++) {
+            if (arenas.get(i).isPlayable()) {
+                ResetArena.resetAndSaveArena(arenas.get(i), false);
+                Bukkit.broadcastMessage(ChatColor.GOLD + "# " + arenas.get(i).getName() + " # " + ChatColor.BLUE + "Reset and Saved.");
+            }
+        }
+        for (Player pls : Bukkit.getOnlinePlayers()) {
+            pls.teleport(Lobby.getLobbyLoc());
+        }
+        Date date1 = new Date();
+        Timestamp timestamp1 = new Timestamp(date1.getTime());
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTimeInMillis(timestamp1.getTime());
+
+        long time = calendar1.getTimeInMillis() - calendar.getTimeInMillis();
+
+        Bukkit.broadcastMessage(ChatColor.GREEN + "Finished resetting all arenas. (" + time + "ms)");
     }
 
 }

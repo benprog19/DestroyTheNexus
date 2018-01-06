@@ -22,10 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -71,35 +68,7 @@ public class DTNCommand implements CommandExecutor {
                     } else if (args[0].equalsIgnoreCase("gamestate")) {
                         player.sendMessage(ChatColor.GREEN + "Current state: " + GameState.getGameState().toString());
                     } else if (args[0].equalsIgnoreCase("resetall")) {
-                        Bukkit.broadcastMessage(ChatColor.RED + "Resetting all Arenas...");
-
-                        Date date = new Date();
-                        Timestamp timestamp = new Timestamp(date.getTime());
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTimeInMillis(timestamp.getTime());
-
-                        for (Player pls : Bukkit.getOnlinePlayers()) {
-                            pls.teleport(new Location(Bukkit.getWorlds().get(1), 0.5, 100.0, 0.5));
-                        }
-                        ArrayList<Arena> arenas = Arenas.getRegisteredArenas();
-                        for (int i = 0; i < arenas.size(); i++) {
-                            if (arenas.get(i).isPlayable()) {
-                                ResetArena.resetAndSaveArena(arenas.get(i), false);
-                                Bukkit.broadcastMessage(ChatColor.GOLD + "# " + arenas.get(i).getName() + " # " + ChatColor.BLUE + "Reset and Saved.");
-                            }
-                        }
-                        for (Player pls : Bukkit.getOnlinePlayers()) {
-                            pls.teleport(Lobby.getLobbyLoc());
-                        }
-                        Date date1 = new Date();
-                        Timestamp timestamp1 = new Timestamp(date1.getTime());
-                        Calendar calendar1 = Calendar.getInstance();
-                        calendar1.setTimeInMillis(timestamp1.getTime());
-
-                        long time = calendar1.getTimeInMillis() - calendar.getTimeInMillis();
-
-                        Bukkit.broadcastMessage(ChatColor.GREEN + "Finished resetting all arenas. (" + time + "ms)");
-                        Bukkit.reload();
+                        Arenas.resetAll();
                     }
                 } else if (args.length == 2) {
                     if (args[0].equalsIgnoreCase("arena")) {

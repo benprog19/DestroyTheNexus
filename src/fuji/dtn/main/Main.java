@@ -1,6 +1,5 @@
 package fuji.dtn.main;
 
-import fuji.dtn.arena.Arena;
 import fuji.dtn.arena.Arenas;
 import fuji.dtn.arena.ResetArena;
 import fuji.dtn.arena.Selection;
@@ -180,6 +179,6 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        Arenas.resetAll();
     }
 }
