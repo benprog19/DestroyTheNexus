@@ -22,6 +22,7 @@ public class KitCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("kit")) {
             if (args.length == 0) {
                 player.sendMessage(ChatColor.GOLD + "/kit select <kit>");
+                player.sendMessage(ChatColor.GOLD + "/kit <kit>");
                 player.sendMessage(ChatColor.GOLD + "/kit list");
             } else if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("select")) {
@@ -37,7 +38,7 @@ public class KitCommand implements CommandExecutor {
                         player.sendMessage(ChatColor.RED + " No kits available.");
                     }
                 } else if (args[0] != null) {
-                    String kitname = args[1];
+                    String kitname = args[0];
                     Kit kit = Kits.getKitByName(kitname);
                     if (kit != null) {
                         Kits.addPlayerToKit(player, kit);
