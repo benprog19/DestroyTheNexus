@@ -1,5 +1,7 @@
 package fuji.dtn.events;
 
+import com.connorlinfoot.titleapi.TitleAPI;
+import fuji.dtn.game.Game;
 import fuji.dtn.game.Players;
 import fuji.dtn.game.Spectators;
 import fuji.dtn.kits.Kit;
@@ -7,6 +9,8 @@ import fuji.dtn.kits.Kits;
 import fuji.dtn.main.Main;
 import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
+import fuji.dtn.util.ParticleUtil;
+import net.minecraft.server.v1_12_R1.EnumParticle;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
@@ -50,9 +54,14 @@ public class DeathEvent implements Listener {
                 player.getInventory().clear();
                 if (player.getKiller() != null && player.getKiller() instanceof Player) {
                     Player killer = player.getKiller();
+                    Team killersTeam = Teams.getTeamFromPlayer(killer);
+                    if (killersTeam != null) {
+                        TitleAPI.sendTitle(player, 0, 100, 0, ChatColor.RED + "YOU DIED", "You were killed by " + killersTeam.getColor() + killer.getName() + ChatColor.WHITE + ".");
+                    }
                     e.setDeathMessage(Teams.getColorFromPlayerTeam(player) + player.getName() + " (" + Kits.getKitNameByPlayer(player) + ")" + ChatColor.GRAY + " was defeated by " + Teams.getColorFromPlayerTeam(killer) + killer.getName() + " (" + Kits.getKitByPlayer(killer).getName() + ").");
                     predeath(player, killer);
                 } else {
+                    TitleAPI.sendTitle(player, 0, 100, 0, ChatColor.RED + "YOU DIED", "");
                     e.setDeathMessage(Teams.getColorFromPlayerTeam(player) + player.getName() + " (" + Kits.getKitNameByPlayer(player) + ")" + ChatColor.GRAY + " has died.");
                     predeath(player, null);
                 }
@@ -76,9 +85,29 @@ public class DeathEvent implements Listener {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 2));
         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 2));
         player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, player.getLocation(), 1);
-        player.sendMessage(ChatColor.GOLD + "You will be revived in " + ChatColor.RED + "10 seconds.");
         player.setAllowFlight(true);
-        afterdeath(player, killer);
+        ParticleUtil.createHelix(player.getLocation(), EnumParticle.FLAME,  1, 3);
+
+        if (!Game.invincible(Teams.getTeamFromPlayer(player))) {
+            player.sendMessage(ChatColor.RED + "You have died and your nexus has been destroyed. You may no longer respawn.");
+            Bukkit.broadcastMessage(Teams.getTeamFromPlayer(player).getColor() + player.getName() + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + " >> " + ChatColor.RED + "" + ChatColor.BOLD + "ELIMINATED");
+            player.getWorld().strikeLightningEffect(player.getLocation());
+            if (teamIsDead(Teams.getTeamFromPlayer(player))) {
+                if (killer != null) {
+                    Game.endGame(Teams.getTeamFromPlayer(killer));
+                } else {
+                    if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("red"))) {
+                        Game.endGame(Teams.getTeamByName("blue"));
+                    } else if (Teams.getTeamFromPlayer(player).equals(Teams.getTeamByName("blue"))) {
+                        Game.endGame(Teams.getTeamByName("red"));
+                    }
+                }
+            }
+        } else {
+            player.sendMessage(ChatColor.GOLD + "You will be revived in " + ChatColor.RED + "10 seconds.");
+            afterdeath(player, killer);
+        }
+
     }
 
     private void afterdeath(final Player player, Player killer) {
@@ -92,6 +121,7 @@ public class DeathEvent implements Listener {
                 }
                 Players.teleportPlayerToTeams(player, false);
                 player.setHealth(20);
+                player.setFireTicks(0);
                 for (int pls = 0; pls < Players.getPlayers().size(); pls++) {
                     Player pls1 = Bukkit.getPlayer(Players.getPlayers().get(pls));
                     pls1.showPlayer(player);
@@ -108,6 +138,7 @@ public class DeathEvent implements Listener {
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 255));
                 player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, player.getLocation(), 1);
+                TitleAPI.sendTitle(player, 0, 100, 0, "", ChatColor.GREEN + "REVIVED");
                 player.sendMessage(ChatColor.GREEN + "You have been revived!");
                 Kit kit = Kits.getKitByPlayer(player);
                 if (kit != null) {
@@ -120,6 +151,23 @@ public class DeathEvent implements Listener {
 
     public static boolean isDead(Player player) {
         return deadPlayers.contains(player.getUniqueId());
+    }
+
+    public static boolean teamIsDead(Team team) {
+        int playersTeamCount = team.getPlayers().size();
+        int deadTeamPlayers = 0;
+
+        for (int i = 0; i < playersTeamCount; i++) {
+            Player user = Bukkit.getPlayer(team.getPlayers().get(i));
+            if (isDead(user)) {
+                deadTeamPlayers++;
+            }
+        }
+
+        if (deadTeamPlayers == playersTeamCount) {
+            return true;
+        }
+        return false;
     }
 
 }
