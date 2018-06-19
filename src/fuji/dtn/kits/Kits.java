@@ -229,7 +229,7 @@ public class Kits {
         }
         player.updateInventory();
         String name = kit.getName();
-        System.out.print("Kit Inv: " + kit.getName());
+        //System.out.print("Kit Inv: " + kit.getName());
 
         ConfigurationSection pathInventory = Main.kitStorage.get().getConfigurationSection("Kits." + kit.getName() + ".Inventory");
 
@@ -239,10 +239,10 @@ public class Kits {
         while (iterator.hasNext()) {
             String configItemName = iterator.next();
             ItemStack itemStack = createItemStack(pathInventory.getConfigurationSection("." + configItemName));
-            System.out.print("ItemStack for " + kit.getName() + " putting with " + player.getName() + ": ");
-            System.out.print("ConifgItemName: " + configItemName);
-            System.out.print("Material: " + itemStack.getType().toString());
-            System.out.print("DisplayName: " + itemStack.getItemMeta().getDisplayName());
+            //System.out.print("ItemStack for " + kit.getName() + " putting with " + player.getName() + ": ");
+            //System.out.print("ConifgItemName: " + configItemName);
+            //System.out.print("Material: " + itemStack.getType().toString());
+            //System.out.print("DisplayName: " + itemStack.getItemMeta().getDisplayName());
             int slot = pathInventory.getInt("." + configItemName + ".slot");
 
 

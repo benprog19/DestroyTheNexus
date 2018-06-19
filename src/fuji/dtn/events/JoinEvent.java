@@ -30,21 +30,9 @@ public class JoinEvent implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
         player.setGameMode(GameMode.SURVIVAL);
-        player.getInventory().clear();
-        player.getInventory().setHelmet(null);
-        player.getInventory().setChestplate(null);
-        player.getInventory().setLeggings(null);
-        player.getInventory().setBoots(null);
-        for (Player pls : Bukkit.getOnlinePlayers()) {
-            pls.showPlayer(player);
-        }
-
-        for (PotionEffect effect : player.getActivePotionEffects()) {
-            player.removePotionEffect(effect.getType());
-        }
-
+        Players.resetPlayers(false);
         if (GameState.getGameState() == GameState.WAITING || GameState.getGameState() == GameState.STARTING) {
-
+            Players.resetPlayers(true);
             Players.addPlayer(player);
             if (Lobby.getLobbyLoc() != null) {
                 player.teleport(Lobby.getLobbyLoc());

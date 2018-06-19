@@ -1,6 +1,8 @@
 package fuji.dtn.game;
 
+import com.connorlinfoot.titleapi.TitleAPI;
 import fuji.dtn.arena.ResetArena;
+import fuji.dtn.events.NexusBlockBreakEvent;
 import fuji.dtn.kits.Kit;
 import fuji.dtn.kits.Kits;
 import fuji.dtn.main.Main;
@@ -54,7 +56,7 @@ public class GameTimer {
                         GameState.setGameState(GameState.WAITING);
                         cancel();
                         for (Player pls : Bukkit.getOnlinePlayers()) {
-                            System.out.print(Lobby.getLobbyLoc().toString());
+                            //System.out.print(Lobby.getLobbyLoc().toString());
                             pls.teleport(Lobby.getLobbyLoc());
                             pls.sendMessage(ChatColor.RED + "A player has left and there is no longer enough players to start playing the game. Please wait for more players.");
                         }
@@ -65,8 +67,9 @@ public class GameTimer {
                         for (int i = 0; i < players.size(); i++) {
                             Player player = Bukkit.getPlayer(players.get(i));
                             if (player.isOnline()) {
-                                player.sendMessage(ChatColor.GOLD + "Match starting in " + ChatColor.RED + count + " seconds...");
-                                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 2);
+                                TitleAPI.sendTitle(player, 5, 40, 5, ChatColor.GOLD + "" + count, "");
+                                player.sendMessage(ChatColor.GOLD + "Match starting in " + ChatColor.RED + count + " second(s)...");
+                                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                             }
                         }
                     }
@@ -76,14 +79,28 @@ public class GameTimer {
                         ResetArena.resetArena(Rotation.getCurrentArena(), true);
                         Players.teleportPlayerToTeams(null, true);
                         GameState.setGameState(GameState.INGAME);
+                        for (int i = 0; i < 5; i++) {
+                            Bukkit.broadcastMessage("  ");
+                        }
+                        Bukkit.broadcastMessage(ChatColor.BLUE + "" + ChatColor.STRIKETHROUGH + "                                                                                ");
+                        Bukkit.broadcastMessage("  ");
+                        Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "    " + Rotation.getCurrentArena().getName());
+                        Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "       built by " + ChatColor.LIGHT_PURPLE + Rotation.getCurrentArena().getCreator());
+                        Bukkit.broadcastMessage("  ");
+                        Bukkit.broadcastMessage("     You are " + ChatColor.RED + "" + ChatColor.BOLD +  Math.round(Rotation.getCurrentArena().getRedLocation().distance(Rotation.getCurrentArena().getBlueLocation())) + "m " + ChatColor.WHITE + "away from your opponents.");
+                        Bukkit.broadcastMessage("  ");
+                        Bukkit.broadcastMessage(ChatColor.BLUE + "" + ChatColor.STRIKETHROUGH + "                                                                                ");
+                        for (int i = 0; i < 3; i++) {
+                            Bukkit.broadcastMessage("  ");
+                        }
                         for (int i = 0; i < players.size(); i++) {
                             Player player = Bukkit.getPlayer(players.get(i));
-                            System.out.print(players.size() + " players.");
+                            System.out.print(players.size() + " > players");
                             if (player.isOnline()) {
                                 for (Player pls : Bukkit.getOnlinePlayers()) {
                                     pls.showPlayer(player);
                                 }
-                                player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1, 1);
+                                player.playSound(player.getLocation(), Sound.ENTITY_ENDERDRAGON_GROWL, 1, 0);
                                 player.setHealth(20);
                                 player.setFoodLevel(20);
                                 player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 255));
@@ -96,12 +113,17 @@ public class GameTimer {
                                 Kit kit = Kits.getKitByPlayer(player);
                                 if (kit == null) {
                                     kit = Kits.getDefaultKit();
-                                    System.out.print("Default Kit: " + kit.getName());
+                                    //System.out.print("Default Kit: " + kit.getName());
                                     Kits.addPlayerToKit(player, kit);
                                 }
-                                System.out.print("Setting Kit: " + kit.getName());
+                                //System.out.print("Setting Kit: " + kit.getName());
                                 Kits.setInventory(player, kit);
-                                System.out.print("Has Kit: " + Kits.getKitByPlayer(player).getName());
+                                //System.out.print("Has Kit: " + Kits.getKitByPlayer(player).getName());
+
+                                System.out.print(" -- Teams Setup:");
+                                System.out.print("    RED (" + Teams.getTeamByName("red").getPlayers().size() + ")" + Teams.getTeamByName("red").getPlayers().toString());
+                                System.out.print("    BLUE (" + Teams.getTeamByName("blue").getPlayers().size() + ")" + Teams.getTeamByName("blue").getPlayers().toString());
+
                             }
                         }
                         cancel();
@@ -147,6 +169,8 @@ public class GameTimer {
                         player.getInventory().clear();
                         player.updateInventory();
                         player.setGameMode(GameMode.ADVENTURE);
+                        NexusBlockBreakEvent.blocksBlue = 0;
+                        NexusBlockBreakEvent.blocksRed = 0;
                         for (Player pls : Bukkit.getOnlinePlayers()) {
                             pls.showPlayer(player);
                         }

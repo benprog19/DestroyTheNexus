@@ -8,6 +8,7 @@ import fuji.dtn.commands.KitCommand;
 import fuji.dtn.events.*;
 import fuji.dtn.game.GameState;
 import fuji.dtn.game.Lobby;
+import fuji.dtn.game.Players;
 import fuji.dtn.game.Spectators;
 import fuji.dtn.kits.Kits;
 import fuji.dtn.storage.ArenaStorage;
@@ -17,7 +18,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 
@@ -57,6 +57,10 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DamageEvent(), this);
         getServer().getPluginManager().registerEvents(new MoveEvent(), this);
         getServer().getPluginManager().registerEvents(new InteractEvent(), this);
+        getServer().getPluginManager().registerEvents(new ItemPickUpEvent(), this);
+        getServer().getPluginManager().registerEvents(new CraftEvent(), this);
+        getServer().getPluginManager().registerEvents(new BlockPlaceEvent(), this);
+        getServer().getPluginManager().registerEvents(new InventoryClickEvent(), this);
 
         red = new Team("Red", ChatColor.RED, new ArrayList<>());
         blue = new Team("Blue", ChatColor.BLUE, new ArrayList<>());
@@ -165,14 +169,7 @@ public class Main extends JavaPlugin {
             } else {
                 pls.sendMessage(ChatColor.RED + "Lobby location is invalid. Teleporting to your last known location.");
             }
-            pls.getInventory().clear();
-            pls.getInventory().setHelmet(null);
-            pls.getInventory().setChestplate(null);
-            pls.getInventory().setLeggings(null);
-            pls.getInventory().setBoots(null);
-            for (PotionEffect effect : pls.getActivePotionEffects()) {
-                pls.removePotionEffect(effect.getType());
-            }
+            Players.resetPlayers(true);
 
         }
     }

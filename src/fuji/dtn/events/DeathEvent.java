@@ -56,7 +56,7 @@ public class DeathEvent implements Listener {
                     Player killer = player.getKiller();
                     Team killersTeam = Teams.getTeamFromPlayer(killer);
                     if (killersTeam != null) {
-                        TitleAPI.sendTitle(player, 0, 100, 0, ChatColor.RED + "YOU DIED", "You were killed by " + killersTeam.getColor() + killer.getName() + ChatColor.WHITE + ".");
+                        TitleAPI.sendTitle(player, 0, 100, 0, ChatColor.RED + "YOU DIED", "You were killed by " + killersTeam.getColor() + killer.getName() + ChatColor.RED + " ♥ " + killer.getHealth() + ChatColor.WHITE + ".");
                     }
                     e.setDeathMessage(Teams.getColorFromPlayerTeam(player) + player.getName() + " (" + Kits.getKitNameByPlayer(player) + ")" + ChatColor.GRAY + " was defeated by " + Teams.getColorFromPlayerTeam(killer) + killer.getName() + " (" + Kits.getKitByPlayer(killer).getName() + ").");
                     predeath(player, killer);
@@ -90,7 +90,7 @@ public class DeathEvent implements Listener {
 
         if (!Game.invincible(Teams.getTeamFromPlayer(player))) {
             player.sendMessage(ChatColor.RED + "You have died and your nexus has been destroyed. You may no longer respawn.");
-            Bukkit.broadcastMessage(Teams.getTeamFromPlayer(player).getColor() + player.getName() + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + " >> " + ChatColor.RED + "" + ChatColor.BOLD + "ELIMINATED");
+            Bukkit.broadcastMessage(Teams.getTeamFromPlayer(player).getColor() + player.getName() + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + " >> " + ChatColor.RED + "ELIMINATED");
             player.getWorld().strikeLightningEffect(player.getLocation());
             if (teamIsDead(Teams.getTeamFromPlayer(player))) {
                 if (killer != null) {

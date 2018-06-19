@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -23,7 +24,6 @@ public class Menu {
     Inventory inventory;
 
     public Menu(String title, int slots) {
-        this.items = items;
         this.slots = slots;
         this.title = title;
 
@@ -53,13 +53,23 @@ public class Menu {
 
     public void addItem(MenuItem item) {
         ItemStack itemStack = new ItemStack(item.getMaterial(), item.getAmount(), item.getId());
+       // System.out.print("IS > Material:" + itemStack.getType().toString() + " > Amount:" + itemStack.getAmount() + " > ID:" + itemStack.getDurability());
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(item.getName());
-        itemMeta.setLore(item.getLore());
+       // System.out.print("IS > Name(display):" + itemMeta.getDisplayName());
+        if (item.getLore() != null) {
+            List<String> lore = item.getLore();
+            itemMeta.setLore(lore);
+            //System.out.print("IS > Lore:" + lore.toString());
+        }
         itemStack.setItemMeta(itemMeta);
+        //items.add(item);
         inventory.setItem(item.getSlot(), itemStack);
+
+        //Bukkit.getPlayer("benprog19").getInventory().setItem(item.getSlot(), itemStack);
     }
 
+    @Deprecated
     public void addItems(ArrayList<MenuItem> items) {
         for (int i = 0; i < items.size(); i++) {
             ItemStack itemStack = new ItemStack(items.get(i).getMaterial(), items.get(i).getAmount(), items.get(i).getId());

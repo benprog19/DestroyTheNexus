@@ -1,7 +1,9 @@
 package fuji.dtn.teams;
 
+import com.connorlinfoot.titleapi.TitleAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -35,7 +37,21 @@ public class Team {
                         getUniqueId())) {
             players.add(player.getUniqueId());
             player.sendMessage(ChatColor.GOLD + "You joined the " + color + "" + ChatColor.BOLD + name.toUpperCase() + " TEAM" + ChatColor.GOLD + ".");
+            TitleAPI.sendTitle(player, 0, 100, 20, "", ChatColor.WHITE + "You are on the " + color + name.toUpperCase() + " TEAM" + ChatColor.WHITE + ".");
         }
+    }
+
+    public void bc(String message) {
+        for (int i = 0; i < players.size(); i++) {
+            OfflinePlayer player = Bukkit.getOfflinePlayer(players.get(i));
+            if (player.isOnline()) {
+                ((Player) player).sendMessage(message);
+            }
+        }
+    }
+
+    public void removeAllPlayers() {
+        players.clear();
     }
 
     public void addPlayerUUID(UUID uuid) {

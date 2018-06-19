@@ -59,24 +59,17 @@ public class Teams {
         Team blue = Teams.getTeamByName("blue");
 
         int pcount = players.size();
-
+        red.removeAllPlayers();
+        blue.removeAllPlayers();
 
         for (int i = 0; i < pcount; i++) {
             if (Teams.getTeamFromPlayer(Bukkit.getPlayer(players.get(i))) != null) {
                 if (count == 0) {
                     count++;
                     red.addPlayerUUID(players.get(i));
-                    Player player = Bukkit.getPlayer(players.get(i));
-                    if (player.isOnline()) {
-                        player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "You joined " + red.getName().toUpperCase() + " Team.");
-                    }
                 } else if (count == 1) {
                     count = 0;
                     blue.addPlayerUUID(players.get(i));
-                    Player player = Bukkit.getPlayer(players.get(i));
-                    if (player.isOnline()) {
-                        player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "You joined " + blue.getName().toUpperCase() + " Team.");
-                    }
                 }
             }
 

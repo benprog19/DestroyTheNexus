@@ -1,7 +1,9 @@
 package fuji.dtn.game;
 
+import com.connorlinfoot.titleapi.TitleAPI;
 import fuji.dtn.arena.Arena;
-import fuji.dtn.arena.ResetArena;
+import fuji.dtn.events.BlockPlaceEvent;
+import fuji.dtn.events.DeathEvent;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
@@ -36,25 +38,33 @@ public class Game {
 
     public static void endGame(Team winner) {
         players.clear();
+        DeathEvent.deadPlayers.clear();
+        BlockPlaceEvent.clearBlocks();
+        redDestroyed = false;
+        blueDestroyed = false;
+
         for (Player pls : Bukkit.getOnlinePlayers()) {
             if (!Spectators.isSpectator(pls)) {
-                players.add(pls.getUniqueId());
-                Players.addPlayer(pls);
+                Spectators.removePlayer(pls);
             }
             pls.setGameMode(GameMode.SURVIVAL);
             pls.setAllowFlight(true);
             pls.getInventory().clear();
+            pls.setHealth(20);
+            for (Player pls1 : Bukkit.getOnlinePlayers()) {
+                pls.showPlayer(pls1);
+            }
         }
 
         if (Rotation.getCurrentArena() != null) {
-            Bukkit.broadcastMessage(ChatColor.GOLD + "" + ChatColor.STRIKETHROUGH + "                                       ");
+            Bukkit.broadcastMessage(ChatColor.GOLD + "" + ChatColor.STRIKETHROUGH + "                                                                       ");
             Bukkit.broadcastMessage(" ");
             Bukkit.broadcastMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "The Winner of " + ChatColor.WHITE
                     + "" + ChatColor.BOLD + Rotation.getCurrentArena().getName() + ChatColor.GOLD + " "
                     + ChatColor.BOLD + "is " + winner.getColor() + "" + ChatColor.BOLD + "TEAM "
                     + winner.getName().toUpperCase() + ChatColor.GOLD + "" + ChatColor.BOLD + "!");
             Bukkit.broadcastMessage(" ");
-            Bukkit.broadcastMessage(ChatColor.GOLD + "" + ChatColor.STRIKETHROUGH + "                                       ");
+            Bukkit.broadcastMessage(ChatColor.GOLD + "" + ChatColor.STRIKETHROUGH + "                                                                       ");
         }
 
         GameState.setGameState(GameState.ENDING);
@@ -71,21 +81,30 @@ public class Game {
             for (int i = 0; i < 20; i++) {
                 blueloc.getWorld().strikeLightning(blueloc);
             }
-            blueloc.getWorld().createExplosion(blueloc.getBlockX(), blueloc.getBlockY(), blueloc.getBlockZ(), 100.0F);
+            blueloc.getWorld().createExplosion(blueloc.getBlockX(), blueloc.getBlockY(), blueloc.getBlockZ(), 50.0F);
             blueloc.getWorld().playSound(blueloc, Sound.ENTITY_ENDERDRAGON_DEATH, 100, 1);
+
+
         } else if (winner.equals(blue)) {
             loser = red;
             Location redLoc = Rotation.getCurrentArena().getRedLocation();
             for (int i = 0; i < 20; i++) {
                 redLoc.getWorld().strikeLightning(redLoc);
             }
-            redLoc.getWorld().createExplosion(redLoc.getBlockX(), redLoc.getBlockY(), redLoc.getBlockZ(), 100.0F);
+            redLoc.getWorld().createExplosion(redLoc.getBlockX(), redLoc.getBlockY(), redLoc.getBlockZ(), 50.0F);
             redLoc.getWorld().playSound(redLoc, Sound.ENTITY_ENDERDRAGON_DEATH, 100, 1);
         } else {
             loser = null;
             Bukkit.broadcastMessage(ChatColor.RED + "Error while finding loser. Restarting...");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "restart");
         }
+        for (Player pls : Bukkit.getOnlinePlayers()) {
+            TitleAPI.sendTitle(pls, 5, 100, 5,  winner.getColor() + "" + ChatColor.BOLD + winner.getName().toUpperCase() + " TEAM", ChatColor.BOLD + "WAS VICTORIOUS");
+        }
+
+        red.removeAllPlayers();
+        blue.removeAllPlayers();
+
         timer.endingGame(winner, loser);
     }
 
@@ -132,4 +151,33 @@ public class Game {
     public static void forceMaitence() {
         GameState.setGameState(GameState.SETTINGUP);
     }
+
+    static boolean redDestroyed = false;
+    static boolean blueDestroyed = false;
+
+    public static void lostInvincibility(Team nexusDestroyed) {
+        if (nexusDestroyed.getName().equalsIgnoreCase("red")) {
+            redDestroyed = true;
+        } else if (nexusDestroyed.getName().equalsIgnoreCase("blue")) {
+            blueDestroyed = true;
+        }
+    }
+
+    public static boolean invincible(Team invincible) {
+        if (invincible.getName().equalsIgnoreCase("red")) {
+            if (redDestroyed) {
+                return false;
+            } else {
+                return true;
+            }
+        } else if (invincible.getName().equalsIgnoreCase("blue")) {
+            if (blueDestroyed) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -29,10 +29,12 @@ public class QuitEvent implements Listener {
         Team playerTeam = Teams.getTeamFromPlayer(player);
 
         if (playerTeam != null) {
+            playerTeam.removePlayer(player);
             e.setQuitMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "] " + playerTeam.getColor() + player.getName());
         } else {
             e.setQuitMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "] " + ChatColor.GRAY + player.getName());
         }
+
         if (GameState.getGameState().equals(GameState.INGAME)) {
             int size = Bukkit.getOnlinePlayers().size();
             System.out.print("Size: " + size);

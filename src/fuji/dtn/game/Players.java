@@ -7,7 +7,11 @@ import fuji.dtn.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,7 +29,6 @@ public class Players {
     public static void addPlayer(Player player) {
         if (!isPlayer(player)) {
             players.add(player.getUniqueId());
-            player.sendMessage(ChatColor.GOLD + "You have been added in as a " + ChatColor.GREEN + "" + ChatColor.BOLD + "PLAYER" + ChatColor.GOLD + ".");
         }
     }
 
@@ -104,6 +107,30 @@ public class Players {
 
     public static void setupPlayers() {
         teleportPlayerToTeams(null, true);
+    }
+
+    public static void resetPlayers(boolean forLobby) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.getInventory().clear();
+            player.getInventory().setHelmet(null);
+            player.getInventory().setChestplate(null);
+            player.getInventory().setLeggings(null);
+            player.getInventory().setBoots(null);
+            for (Player pls : Bukkit.getOnlinePlayers()) {
+                pls.showPlayer(player);
+            }
+
+            for (PotionEffect effect : player.getActivePotionEffects()) {
+                player.removePotionEffect(effect.getType());
+            }
+            if (forLobby) {
+                ItemStack itemStack = new ItemStack(Material.FEATHER);
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Select A Kit");
+                itemStack.setItemMeta(itemMeta);
+                player.getInventory().setItem(0, itemStack);
+            }
+        }
     }
 
 }

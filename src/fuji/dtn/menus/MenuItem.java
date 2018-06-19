@@ -24,13 +24,13 @@ public class MenuItem {
 
     int slot;
 
-    public MenuItem(Material material, String name, byte id, Inventory inventory) {
+    public MenuItem(Material material, String name, int amount, byte id, Inventory inventory) {
         this.material = material;
         this.name = name;
         this.id = id;
         this.inventory = inventory;
 
-        ItemStack itemStack = new ItemStack(material, id);
+        ItemStack itemStack = new ItemStack(material, amount, id);
         this.itemStack = itemStack;
     }
 
@@ -79,6 +79,10 @@ public class MenuItem {
 
     public void setSlot(int x, int y) {
         slot = MenuMathUtil.calculateSlot(x, y);
+    }
+
+    public void setSlot(int slot) {
+        this.slot = slot;
     }
 
     public int getSlot() {
