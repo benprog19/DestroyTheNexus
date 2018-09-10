@@ -4,10 +4,7 @@ import fuji.dtn.arena.Arena;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -55,6 +52,8 @@ public class Players {
         Arena arena = Rotation.getCurrentArena();
         if (red != null && blue != null && arena != null) {
             if (allPlayers) {
+                World world = arena.getRedLocation().getWorld();
+                world.setTime(arena.getTime());
                 for (int i = 0; i < getPlayers().size(); i++) {
                     Player player = Bukkit.getPlayer(getPlayers().get(i));
                     if (red.hasPlayer(player)) {
@@ -110,27 +109,32 @@ public class Players {
     }
 
     public static void resetPlayers(boolean forLobby) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.getInventory().clear();
-            player.getInventory().setHelmet(null);
-            player.getInventory().setChestplate(null);
-            player.getInventory().setLeggings(null);
-            player.getInventory().setBoots(null);
-            for (Player pls : Bukkit.getOnlinePlayers()) {
-                pls.showPlayer(player);
-            }
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.getInventory().clear();
+                player.getInventory().setHelmet(null);
+                player.getInventory().setChestplate(null);
+                player.getInventory().setLeggings(null);
+                player.getInventory().setBoots(null);
+                for (Player pls : Bukkit.getOnlinePlayers()) {
+                    pls.showPlayer(player);
+                }
 
-            for (PotionEffect effect : player.getActivePotionEffects()) {
-                player.removePotionEffect(effect.getType());
-            }
-            if (forLobby) {
-                ItemStack itemStack = new ItemStack(Material.FEATHER);
-                ItemMeta itemMeta = itemStack.getItemMeta();
-                itemMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Select A Kit");
-                itemStack.setItemMeta(itemMeta);
-                player.getInventory().setItem(0, itemStack);
+                for (PotionEffect effect : player.getActivePotionEffects()) {
+                    player.removePotionEffect(effect.getType());
+                }
+                if (forLobby) {
+                    ItemStack itemStack = new ItemStack(Material.FEATHER);
+                    ItemMeta itemMeta = itemStack.getItemMeta();
+                    itemMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Select A Kit");
+                    itemStack.setItemMeta(itemMeta);
+                    player.getInventory().setItem(0, itemStack);
+
+                    ItemStack itemStack1 = new ItemStack(Material.COMPASS);
+                    ItemMeta itemMeta1 = itemStack1.getItemMeta();
+                    itemMeta1.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Vote For A Map");
+                    itemStack1.setItemMeta(itemMeta1);
+                    player.getInventory().setItem(1, itemStack1);
+                }
             }
         }
-    }
-
 }

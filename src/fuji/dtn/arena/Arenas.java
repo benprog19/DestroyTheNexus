@@ -53,7 +53,7 @@ public class Arenas {
         Main.arenaStorage.get().set("Arenas." + arena.getName() + ".name", arena.getName());
         Main.arenaStorage.get().set("Arenas." + arena.getName() + ".creator", arena.getCreator());
         Main.arenaStorage.get().set("Arenas." + arena.getName() + ".minPlayers", arena.getMinPlayers());
-
+        Main.arenaStorage.get().set("Arenas." + arena.getName() + ".time", arena.getTime());
 
         if (arena.getRedLocation() != null) {
             Main.arenaStorage.get().set("Arenas." + arena.getName() + ".redLocation.x", arena.getRedLocation().getX());

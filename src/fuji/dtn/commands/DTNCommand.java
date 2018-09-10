@@ -153,7 +153,7 @@ public class DTNCommand implements CommandExecutor {
                             Pattern arenaPattern = Pattern.compile("[^a-zA-Z0-9]");
                             if (!arenaPattern.matcher(arenaName).find()) {
                                 if (!Arenas.isRegistered(arenaName)) {
-                                    Arena arena = new Arena(arenaName, player.getName(), 2, null, null, true, null, null, null, null, null, null);
+                                    Arena arena = new Arena(arenaName, player.getName(), 2, null, null, true, null, null, null, null, null, null, player.getWorld().getTime());
                                     player.sendMessage(ChatColor.GOLD + "You created arena " + ChatColor.RED + arenaName + ChatColor.GOLD + "! As of now, the arena is playable: "
                                             + ChatColor.RED + arena.isPlayable() + ChatColor.GOLD + ".");
                                 } else {
@@ -166,6 +166,8 @@ public class DTNCommand implements CommandExecutor {
 
                         } else if (args[2].equalsIgnoreCase("creator")) {
                             player.sendMessage(ChatColor.GOLD + "/dtn arena <name> creator <creator>");
+                        } else if (args[2].equalsIgnoreCase("time")) {
+                            player.sendMessage(ChatColor.GOLD + "/dtn arena <anem> time <time>");
                         } else if (args[2].equalsIgnoreCase("setspawn")) {
                             player.sendMessage(ChatColor.GOLD + "/dtn arena <name> setspawn <red/blue>");
                         } else if (args[2].equalsIgnoreCase("setnexus")) {
@@ -226,7 +228,12 @@ public class DTNCommand implements CommandExecutor {
                                             (offlinePlayer.
                                                     getName());
                             player.sendMessage(ChatColor.GOLD + "You set the creator of " + ChatColor.RED + arena.getName() + ChatColor.GOLD + " to be " + ChatColor.RED + arena.getCreator() + ChatColor.GOLD + ".");
-
+                        } else if (args[2].equalsIgnoreCase("time")) {
+                            String arenaName = args[1];
+                            Arena arena = Arenas.getArenaByName(arenaName);
+                            int time = Integer.parseInt(args[3]);
+                            arena.setTime(time);
+                            player.sendMessage(ChatColor.GOLD + "You set the time of " + ChatColor.RED + arena.getName() + ChatColor.GOLD + " to be " + ChatColor.RED + arena.getTime() + ChatColor.GOLD  + ".");
                         } else if (args[2].equalsIgnoreCase("setspawn")) {
                             if (args[3].equalsIgnoreCase("red")) {
                                 Location location = player.getLocation();
@@ -348,5 +355,6 @@ public class DTNCommand implements CommandExecutor {
         player.sendMessage(ChatColor.GOLD + "/dtn arena <name> setnexus <red/blue>");
         player.sendMessage(ChatColor.GOLD + "/dtn arena <name> setcorner");
         player.sendMessage(ChatColor.GOLD + "/dtn arena <name> setspawn <red/blue>");
+        player.sendMessage(ChatColor.GOLD + "/dtn arena <name> time <time>");
     }
 }

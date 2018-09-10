@@ -5,6 +5,7 @@ import fuji.dtn.arena.ResetArena;
 import fuji.dtn.arena.Selection;
 import fuji.dtn.commands.DTNCommand;
 import fuji.dtn.commands.KitCommand;
+import fuji.dtn.commands.VoteCommand;
 import fuji.dtn.events.*;
 import fuji.dtn.game.GameState;
 import fuji.dtn.game.Lobby;
@@ -43,6 +44,7 @@ public class Main extends JavaPlugin {
 
         getCommand("dtn").setExecutor(new DTNCommand());
         getCommand("kit").setExecutor(new KitCommand());
+        getCommand("vote").setExecutor(new VoteCommand());
         getServer().getPluginManager().registerEvents(new Selection(), this);
         getServer().getPluginManager().registerEvents(new Spectators(), this);
         getServer().getPluginManager().registerEvents(new ResetArena(), this);
@@ -61,6 +63,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CraftEvent(), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceEvent(), this);
         getServer().getPluginManager().registerEvents(new InventoryClickEvent(), this);
+        getServer().getPluginManager().registerEvents(new ExplosionEvent(), this);
 
         red = new Team("Red", ChatColor.RED, new ArrayList<>());
         blue = new Team("Blue", ChatColor.BLUE, new ArrayList<>());

@@ -25,10 +25,12 @@ public class Arena {
     Location blueNexusCorner2;
     Location arenaCorner1;
     Location arenaCorner2;
+    long time;
+
 
     boolean isReadyToPlay;
 
-    public Arena(String name, String creator, int minPlayers, Location redLocation, Location blueLocation, boolean hasNexuses, Location redNexusCorner1, Location redNexusCorner2, Location blueNexusCorner1, Location blueNexusCorner2, Location arenaCorner1, Location arenaCorner2) {
+    public Arena(String name, String creator, int minPlayers, Location redLocation, Location blueLocation, boolean hasNexuses, Location redNexusCorner1, Location redNexusCorner2, Location blueNexusCorner1, Location blueNexusCorner2, Location arenaCorner1, Location arenaCorner2, long time) {
         this.name = name;
         this.minPlayers = minPlayers;
         this.creator = creator;
@@ -37,6 +39,7 @@ public class Arena {
         this.hasNexuses = hasNexuses;
         this.arenaCorner1 = arenaCorner1;
         this.arenaCorner2 = arenaCorner2;
+        this.time = time;
         if (hasNexuses) {
             this.redNexusCorner1 = redNexusCorner1;
             this.redNexusCorner2 = redNexusCorner2;
@@ -48,6 +51,13 @@ public class Arena {
         Arenas.registerArena(this);
     }
 
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public long getTime() {
+        return time;
+    }
 
     public void setCreator(String newCreator) {
         this.creator = newCreator;
@@ -202,7 +212,8 @@ public class Arena {
                 blueNexusCorner1,
                 blueNexusCorner2,
                 arenaCorner1,
-                arenaCorner2);
+                arenaCorner2,
+                config.getInt("time"));
 
         return arena;
     }

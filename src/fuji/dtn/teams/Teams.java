@@ -1,5 +1,6 @@
 package fuji.dtn.teams;
 
+import fuji.dtn.titles.Titles;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -43,12 +44,16 @@ public class Teams {
         Team red = Teams.getTeamByName("red");
         Team blue = Teams.getTeamByName("blue");
 
+        final Titles title = new Titles(player, "", "", new ArrayList<>());
         if (red.getPlayers().size() > blue.getPlayers().size()) {
             blue.addPlayer(player);
+            title.setPrefix(ChatColor.BLUE + "");
         } else if (blue.getPlayers().size() > red.getPlayers().size()) {
             red.addPlayer(player);
+            title.setPrefix(ChatColor.RED + "");
         } else if (red.getPlayers().size() == blue.getPlayers().size()) {
             red.addPlayer(player);
+            title.setPrefix(ChatColor.RED + "");
         }
     }
 
@@ -61,15 +66,16 @@ public class Teams {
         int pcount = players.size();
         red.removeAllPlayers();
         blue.removeAllPlayers();
-
         for (int i = 0; i < pcount; i++) {
             if (Teams.getTeamFromPlayer(Bukkit.getPlayer(players.get(i))) != null) {
                 if (count == 0) {
                     count++;
                     red.addPlayerUUID(players.get(i));
+                    new Titles(Bukkit.getPlayer(players.get(i)), ChatColor.RED + "", "", new ArrayList<>());
                 } else if (count == 1) {
                     count = 0;
                     blue.addPlayerUUID(players.get(i));
+                    new Titles(Bukkit.getPlayer(players.get(i)), ChatColor.BLUE + "", "", new ArrayList<>());
                 }
             }
 

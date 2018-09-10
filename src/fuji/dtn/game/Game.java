@@ -7,6 +7,8 @@ import fuji.dtn.events.DeathEvent;
 import fuji.dtn.rotation.Rotation;
 import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
+import fuji.dtn.titles.Titles;
+import fuji.dtn.voting.Votes;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -31,9 +33,9 @@ public class Game {
     }
 
     public static void beginGame(int time) {
-        GameState.setGameState(GameState.STARTING);
+        GameState.setGameState(GameState.WAITING);
         GameTimer timer = new GameTimer(time + 1, players);
-        timer.startCountdown();
+        timer.votingCountdown();
     }
 
     public static void endGame(Team winner) {
@@ -51,6 +53,7 @@ public class Game {
             pls.setAllowFlight(true);
             pls.getInventory().clear();
             pls.setHealth(20);
+            new Titles(pls, ChatColor.GREEN + "", "", new ArrayList<>());
             for (Player pls1 : Bukkit.getOnlinePlayers()) {
                 pls.showPlayer(pls1);
             }
@@ -105,36 +108,39 @@ public class Game {
         red.removeAllPlayers();
         blue.removeAllPlayers();
 
+
         timer.endingGame(winner, loser);
     }
 
     public static void tryStart() {
         if (GameState.getGameState().equals(GameState.WAITING)) {
-            if (Bukkit.getOnlinePlayers().size() >= 2) {
-                Players.getPlayers().clear();
+            if (!GameTimer.starting) {
+                if (Bukkit.getOnlinePlayers().size() >= 2) {
+                    Players.getPlayers().clear();
 
-                Team red = Teams.getTeamByName("red");
-                Team blue = Teams.getTeamByName("blue");
+                    Team red = Teams.getTeamByName("red");
+                    Team blue = Teams.getTeamByName("blue");
 
-                red.getPlayers().clear();
-                blue.getPlayers().clear();
+                    red.getPlayers().clear();
+                    blue.getPlayers().clear();
 
-                for (Player pls : Bukkit.getOnlinePlayers()) {
-                    Players.addPlayer(pls);
-                    pls.sendMessage(ChatColor.GREEN + "You have been added into the game.");
+                    for (Player pls : Bukkit.getOnlinePlayers()) {
+                        Players.addPlayer(pls);
+                        pls.sendMessage(ChatColor.GREEN + "You have been added into the game.");
+                    }
+
+                    try {
+                        //new Rotation(); -- old version without voting
+                        Rotation.nullifyArena();
+                        Votes.startVoting();
+                        Game.init(null, Players.getPlayers());
+                        Game.beginGame(30);
+                    } catch (IllegalStateException ex) {
+                        Bukkit.broadcastMessage(ChatColor.RED + "There are no available games to play.");
+                    }
+                } else {
+                    Bukkit.broadcastMessage(ChatColor.RED + "You must wait until more players join before the game begins.");
                 }
-
-                try {
-                    new Rotation();
-                    Game.init(Rotation.getCurrentArena(), Players.getPlayers());
-                    Game.beginGame(30);
-                } catch (IllegalStateException ex) {
-                    Bukkit.broadcastMessage(ChatColor.RED + "There are no available games to play.");
-                }
-
-
-            } else {
-                Bukkit.broadcastMessage(ChatColor.RED + "You must wait until more players join before the game begins.");
             }
         }
 

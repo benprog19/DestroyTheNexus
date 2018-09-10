@@ -11,10 +11,9 @@ import fuji.dtn.teams.Team;
 import fuji.dtn.teams.Teams;
 import fuji.dtn.util.ParticleUtil;
 import net.minecraft.server.v1_12_R1.EnumParticle;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import net.minecraft.server.v1_12_R1.PacketPlayOutCamera;
+import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -56,7 +55,7 @@ public class DeathEvent implements Listener {
                     Player killer = player.getKiller();
                     Team killersTeam = Teams.getTeamFromPlayer(killer);
                     if (killersTeam != null) {
-                        TitleAPI.sendTitle(player, 0, 100, 0, ChatColor.RED + "YOU DIED", "You were killed by " + killersTeam.getColor() + killer.getName() + ChatColor.RED + " ♥ " + killer.getHealth() + ChatColor.WHITE + ".");
+                        TitleAPI.sendTitle(player, 0, 100, 0, ChatColor.RED + "YOU DIED", "You were killed by " + killersTeam.getColor() + killer.getName() + ChatColor.RED + " ♥ " + Math.round(killer.getHealth()) + ChatColor.WHITE + ".");
                     }
                     e.setDeathMessage(Teams.getColorFromPlayerTeam(player) + player.getName() + " (" + Kits.getKitNameByPlayer(player) + ")" + ChatColor.GRAY + " was defeated by " + Teams.getColorFromPlayerTeam(killer) + killer.getName() + " (" + Kits.getKitByPlayer(killer).getName() + ").");
                     predeath(player, killer);
@@ -105,6 +104,23 @@ public class DeathEvent implements Listener {
             }
         } else {
             player.sendMessage(ChatColor.GOLD + "You will be revived in " + ChatColor.RED + "10 seconds.");
+
+            if (killer != null) {
+                player.teleport(new Location(player.getWorld(), player.getLocation().getX(), player.getLocation().getY() + 10, player.getLocation().getZ()));
+                player.setFlying(true);
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        CraftPlayer ckiller = (CraftPlayer) killer;
+                        CraftPlayer cplayer = (CraftPlayer) player;
+                        PacketPlayOutCamera packetPlayOutCamera = new PacketPlayOutCamera(ckiller.getHandle());
+                        cplayer.getHandle().playerConnection.sendPacket(packetPlayOutCamera);
+                    }
+                }.runTaskLater(JavaPlugin.getPlugin(Main.class), 80L);
+
+            }
+
             afterdeath(player, killer);
         }
 
@@ -119,6 +135,11 @@ public class DeathEvent implements Listener {
                 if (deadPlayers.contains(player.getUniqueId())) {
                     deadPlayers.remove(player.getUniqueId());
                 }
+
+                CraftPlayer cplayer = (CraftPlayer) player;
+                PacketPlayOutCamera packetPlayOutCamera = new PacketPlayOutCamera(cplayer.getHandle());
+                cplayer.getHandle().playerConnection.sendPacket(packetPlayOutCamera);
+
                 Players.teleportPlayerToTeams(player, false);
                 player.setHealth(20);
                 player.setFireTicks(0);

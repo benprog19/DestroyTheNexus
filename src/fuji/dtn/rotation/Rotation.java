@@ -17,7 +17,6 @@ public class Rotation {
 
     static Arena currentArena;
 
-
     public Rotation() {
         ArrayList<Arena> arenas = Arenas.getRegisteredArenas();
         ArrayList<Arena> possibleChoices = new ArrayList<>();
@@ -51,10 +50,15 @@ public class Rotation {
         return null;
     }
 
+    public static void nullifyArena() {
+        currentArena = null;
+    }
+
     public static void setNewArena(String arenaName) {
         if (Arenas.isRegistered(arenaName)) {
             Arena arena = Arenas.getArenaByName(arenaName);
             currentArena = arena;
+            Bukkit.broadcastMessage(ChatColor.GOLD + "Rotation set to " + ChatColor.RED + getCurrentArena().getName() + ChatColor.GOLD + " created by " + ChatColor.RED + getCurrentArena().getCreator());
         }
 
     }

@@ -1,5 +1,6 @@
 package fuji.dtn.events;
 
+import fuji.dtn.game.Game;
 import fuji.dtn.game.GameState;
 import fuji.dtn.game.Players;
 import fuji.dtn.teams.Team;
@@ -36,7 +37,7 @@ public class QuitEvent implements Listener {
         }
 
         if (GameState.getGameState().equals(GameState.INGAME)) {
-            int size = Bukkit.getOnlinePlayers().size();
+            int size = Bukkit.getOnlinePlayers().size() - 1;
             System.out.print("Size: " + size);
             if (size <= 1) {
                 Bukkit.reload();
@@ -44,6 +45,14 @@ public class QuitEvent implements Listener {
                 int playersSize = Players.getPlayers().size();
                 if (playersSize <= 1) {
                     Bukkit.reload();
+                } else {
+                    Team red = Teams.getTeamByName("red");
+                    Team blue = Teams.getTeamByName("blue");
+                    if (red.getPlayers().size() > 0 && blue.getPlayers().size() == 0) {
+                        Game.endGame(red);
+                    } else if (blue.getPlayers().size() > 0 && red.getPlayers().size() == 0) {
+                        Game.endGame(blue);
+                    }
                 }
             }
         }
